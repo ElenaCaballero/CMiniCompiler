@@ -26,6 +26,7 @@ public class CMiniLexer implements java_cup.runtime.Scanner {
   /** lexical states */
   public static final int YYINITIAL = 0;
   public static final int COMMENT = 2;
+  public static final int LINECOMMENT = 4;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -34,17 +35,20 @@ public class CMiniLexer implements java_cup.runtime.Scanner {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = { 
-     0,  0,  1, 1
+     0,  0,  1,  1,  2, 2
   };
 
   /** 
    * Translates characters to character classes
    */
   private static final String ZZ_CMAP_PACKED = 
-    "\11\0\1\2\1\2\1\10\1\10\1\10\22\0\1\2\11\0\1\7"+
-    "\4\0\1\6\12\0\7\0\32\1\4\0\1\0\1\0\1\3\1\5"+
-    "\1\4\1\1\1\1\1\1\5\1\1\1\5\1\1\1\1\1\1\1"+
-    "\1\1\5\1\12\0\1\10\u1fa2\0\1\10\1\10\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\udfe6\0";
+    "\11\0\1\3\1\4\25\0\1\3\1\33\4\0\1\45\1\0\1\36"+
+    "\1\37\1\17\1\25\1\34\1\26\1\35\1\16\12\2\1\0\1\27"+
+    "\1\30\1\32\1\31\2\0\13\1\1\54\1\1\1\52\6\1\1\53"+
+    "\5\1\1\42\1\0\1\43\1\0\1\15\1\0\1\12\1\51\1\22"+
+    "\1\50\1\10\1\11\1\1\1\23\1\20\2\1\1\13\1\1\1\21"+
+    "\1\46\1\24\1\1\1\6\1\14\1\5\1\7\1\1\1\47\3\1"+
+    "\1\40\1\44\1\41\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uff92\0";
 
   /** 
    * Translates characters to character classes
@@ -57,11 +61,17 @@ public class CMiniLexer implements java_cup.runtime.Scanner {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\2\0\5\1\1\2\2\1\4\0\1\3\1\4\1\5"+
-    "\1\6\3\7";
+    "\3\0\1\1\1\2\1\3\1\4\4\2\1\5\1\6"+
+    "\3\2\1\7\1\10\1\11\1\12\1\13\2\1\1\14"+
+    "\1\15\1\16\1\17\1\20\1\21\1\22\1\23\2\1"+
+    "\4\2\2\4\1\24\5\2\1\25\1\26\1\27\1\30"+
+    "\3\2\1\31\1\32\1\33\1\34\1\35\1\36\1\2"+
+    "\1\37\2\2\1\40\3\2\1\41\1\2\1\42\5\2"+
+    "\1\43\1\44\1\2\1\45\1\46\3\2\1\47\1\50"+
+    "\1\51\1\2\1\52\1\2\1\53\1\2\1\54";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[21];
+    int [] result = new int[91];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -86,12 +96,21 @@ public class CMiniLexer implements java_cup.runtime.Scanner {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\11\0\22\0\33\0\44\0\55\0\66\0\22"+
-    "\0\77\0\110\0\33\0\55\0\121\0\132\0\22\0\22"+
-    "\0\22\0\143\0\154\0\165\0\176";
+    "\0\0\0\55\0\132\0\207\0\264\0\341\0\u010e\0\u013b"+
+    "\0\u0168\0\u0195\0\u01c2\0\u01ef\0\u021c\0\u0249\0\u0276\0\u02a3"+
+    "\0\207\0\207\0\207\0\u02d0\0\u02fd\0\u032a\0\u0357\0\207"+
+    "\0\207\0\207\0\207\0\207\0\207\0\207\0\207\0\u0384"+
+    "\0\u03b1\0\u03de\0\u040b\0\u0438\0\u0465\0\207\0\u0492\0\207"+
+    "\0\u04bf\0\u04ec\0\u0519\0\u0546\0\u0573\0\207\0\207\0\207"+
+    "\0\264\0\u05a0\0\u05cd\0\u05fa\0\207\0\207\0\207\0\207"+
+    "\0\207\0\207\0\u0627\0\264\0\u0654\0\u0681\0\207\0\u06ae"+
+    "\0\u06db\0\u0708\0\264\0\u0735\0\u0762\0\u078f\0\u07bc\0\u07e9"+
+    "\0\u0816\0\u0843\0\264\0\264\0\u0870\0\207\0\u089d\0\u08ca"+
+    "\0\u08f7\0\u0924\0\264\0\264\0\207\0\u0951\0\264\0\u097e"+
+    "\0\264\0\u09ab\0\264";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[21];
+    int [] result = new int[91];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -114,17 +133,68 @@ public class CMiniLexer implements java_cup.runtime.Scanner {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\3\1\4\1\5\1\6\2\4\1\7\1\3\1\10"+
-    "\6\3\1\11\1\12\1\3\12\0\1\13\1\0\1\14"+
-    "\2\13\5\0\1\5\7\0\1\13\1\0\1\14\1\15"+
-    "\1\16\12\0\1\17\10\0\1\20\7\0\1\21\3\0"+
-    "\1\13\1\0\1\22\2\13\4\0\1\13\1\0\1\23"+
-    "\2\13\4\0\1\22\1\0\3\22\4\0\1\24\1\0"+
-    "\1\23\1\25\1\24\4\0\1\24\1\0\1\23\2\24"+
-    "\4\0\1\24\1\0\1\22\2\24\3\0";
+    "\1\4\1\5\1\6\2\7\1\10\2\5\1\11\1\12"+
+    "\2\5\1\13\1\4\1\14\1\15\1\16\1\5\1\17"+
+    "\1\5\1\20\1\21\1\22\1\23\1\24\1\25\1\26"+
+    "\1\27\1\30\1\31\1\32\1\33\1\34\1\35\1\36"+
+    "\1\37\1\40\1\41\1\5\1\42\1\43\1\44\1\45"+
+    "\2\5\17\46\1\47\41\46\1\50\50\46\56\0\2\5"+
+    "\2\0\11\5\2\0\5\5\21\0\7\5\2\0\1\6"+
+    "\55\0\2\7\51\0\2\5\2\0\1\5\1\51\7\5"+
+    "\2\0\5\5\21\0\7\5\1\0\2\5\2\0\6\5"+
+    "\1\52\2\5\2\0\5\5\21\0\7\5\1\0\2\5"+
+    "\2\0\5\5\1\53\3\5\2\0\5\5\21\0\1\54"+
+    "\6\5\1\0\2\5\2\0\11\5\2\0\2\5\1\55"+
+    "\2\5\21\0\7\5\16\0\1\56\1\57\53\0\1\60"+
+    "\37\0\2\5\2\0\4\5\1\61\4\5\2\0\1\5"+
+    "\1\62\3\5\21\0\7\5\1\0\2\5\2\0\11\5"+
+    "\2\0\3\5\1\63\1\5\21\0\7\5\1\0\2\5"+
+    "\2\0\1\5\1\64\7\5\2\0\5\5\21\0\7\5"+
+    "\32\0\1\65\54\0\1\66\54\0\1\67\54\0\1\70"+
+    "\66\0\1\71\55\0\1\72\10\0\2\5\2\0\11\5"+
+    "\2\0\3\5\1\73\1\5\21\0\7\5\1\0\2\5"+
+    "\2\0\11\5\2\0\5\5\21\0\1\74\6\5\1\0"+
+    "\2\5\2\0\11\5\2\0\5\5\21\0\1\75\6\5"+
+    "\1\0\2\5\2\0\11\5\2\0\5\5\21\0\5\5"+
+    "\1\76\1\5\16\0\1\77\37\0\2\5\2\0\2\5"+
+    "\1\100\6\5\2\0\5\5\21\0\7\5\1\0\2\5"+
+    "\2\0\7\5\1\101\1\5\2\0\5\5\21\0\7\5"+
+    "\1\0\2\5\2\0\6\5\1\102\2\5\2\0\5\5"+
+    "\21\0\7\5\1\0\2\5\2\0\1\5\1\103\7\5"+
+    "\2\0\5\5\21\0\7\5\1\0\2\5\2\0\5\5"+
+    "\1\104\3\5\2\0\5\5\21\0\7\5\1\0\2\5"+
+    "\2\0\1\105\10\5\2\0\5\5\21\0\7\5\1\0"+
+    "\2\5\2\0\5\5\1\106\3\5\2\0\5\5\21\0"+
+    "\7\5\1\0\2\5\2\0\11\5\2\0\1\107\4\5"+
+    "\21\0\7\5\1\0\2\5\2\0\11\5\2\0\1\110"+
+    "\4\5\21\0\7\5\1\0\2\5\2\0\11\5\2\0"+
+    "\5\5\21\0\1\111\6\5\1\0\2\5\2\0\11\5"+
+    "\2\0\5\5\21\0\6\5\1\112\1\0\2\5\2\0"+
+    "\3\5\1\113\5\5\2\0\5\5\21\0\7\5\1\0"+
+    "\2\5\2\0\3\5\1\114\5\5\2\0\5\5\21\0"+
+    "\7\5\1\0\2\5\2\0\7\5\1\100\1\5\2\0"+
+    "\5\5\21\0\7\5\1\0\2\5\2\0\11\5\2\0"+
+    "\1\5\1\115\3\5\21\0\7\5\1\0\2\5\2\0"+
+    "\11\5\1\0\1\116\5\5\21\0\7\5\1\0\2\5"+
+    "\2\0\1\5\1\117\7\5\2\0\5\5\21\0\7\5"+
+    "\1\0\2\5\2\0\11\5\2\0\1\5\1\120\3\5"+
+    "\21\0\7\5\1\0\2\5\2\0\6\5\1\121\2\5"+
+    "\2\0\5\5\21\0\7\5\1\0\2\5\2\0\6\5"+
+    "\1\122\2\5\2\0\5\5\21\0\7\5\1\0\2\5"+
+    "\2\0\11\5\2\0\5\5\21\0\6\5\1\123\1\0"+
+    "\2\5\2\0\4\5\1\124\4\5\2\0\5\5\21\0"+
+    "\7\5\1\0\2\5\2\0\11\5\1\0\1\125\5\5"+
+    "\21\0\7\5\1\0\2\5\2\0\1\126\10\5\2\0"+
+    "\5\5\21\0\7\5\1\0\2\5\2\0\3\5\1\127"+
+    "\5\5\2\0\5\5\21\0\7\5\1\0\2\5\2\0"+
+    "\3\5\1\130\5\5\2\0\5\5\21\0\7\5\1\0"+
+    "\2\5\2\0\4\5\1\131\4\5\2\0\5\5\21\0"+
+    "\7\5\1\0\2\5\2\0\5\5\1\132\3\5\2\0"+
+    "\5\5\21\0\7\5\1\0\2\5\2\0\11\5\2\0"+
+    "\1\5\1\133\3\5\21\0\7\5";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[135];
+    int [] result = new int[2520];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -162,10 +232,12 @@ public class CMiniLexer implements java_cup.runtime.Scanner {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\2\0\1\11\4\1\1\11\2\1\4\0\3\11\4\1";
+    "\3\0\1\11\14\1\3\11\4\1\10\11\6\1\1\11"+
+    "\1\1\1\11\5\1\3\11\4\1\6\11\4\1\1\11"+
+    "\16\1\1\11\6\1\1\11\6\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[21];
+    int [] result = new int[91];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -246,12 +318,10 @@ public class CMiniLexer implements java_cup.runtime.Scanner {
     StringBuffer string = new StringBuffer();
 
     private Symbol symbol(String name, int sym) {
-            System.out.println("name: " + name + " sym: " + sym);
             return new Symbol(sym, yyline, yycolumn);
     }
 
     private Symbol symbol(String name, int sym, Object val) {
-            System.out.println("name: " + name + " sym: " + sym + " val: " + val);
             return new Symbol(sym, yyline, yycolumn, val);
     }
 
@@ -280,7 +350,7 @@ public class CMiniLexer implements java_cup.runtime.Scanner {
     char [] map = new char[0x110000];
     int i = 0;  /* index in packed string  */
     int j = 0;  /* index in unpacked array */
-    while (i < 108) {
+    while (i < 160) {
       int  count = packed.charAt(i++);
       char value = packed.charAt(i++);
       do map[j++] = value; while (--count > 0);
@@ -647,33 +717,181 @@ public class CMiniLexer implements java_cup.runtime.Scanner {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
-            { 
-            }
-          case 8: break;
-          case 2: 
             { System.out.print(yytext());
             }
-          case 9: break;
+          case 45: break;
+          case 2: 
+            { System.out.println("ID: "+yytext());
+            }
+          case 46: break;
           case 3: 
+            { System.out.println("INTEGER: "+yytext());
+            }
+          case 47: break;
+          case 4: 
+            { 
+            }
+          case 48: break;
+          case 5: 
+            { System.out.println("ARTHM Se econtró: /");
+            }
+          case 49: break;
+          case 6: 
+            { System.out.println("ARTHM Se econtró: *");
+            }
+          case 50: break;
+          case 7: 
+            { System.out.println("ARTHM Se econtró: +");
+            }
+          case 51: break;
+          case 8: 
+            { System.out.println("ARTHM Se econtró: -");
+            }
+          case 52: break;
+          case 9: 
+            { System.out.println("Se econtró: ;");
+            }
+          case 53: break;
+          case 10: 
+            { System.out.println("BOOL Se econtró: <");
+            }
+          case 54: break;
+          case 11: 
+            { System.out.println("BOOL Se econtró: >");
+            }
+          case 55: break;
+          case 12: 
+            { System.out.println("Se econtró: ,");
+            }
+          case 56: break;
+          case 13: 
+            { System.out.println("Se econtró: .");
+            }
+          case 57: break;
+          case 14: 
+            { System.out.println("Se econtró: )");
+            }
+          case 58: break;
+          case 15: 
+            { System.out.println("Se econtró: (");
+            }
+          case 59: break;
+          case 16: 
+            { System.out.println("Se econtró: {");
+            }
+          case 60: break;
+          case 17: 
+            { System.out.println("Se econtró: }");
+            }
+          case 61: break;
+          case 18: 
+            { System.out.println("Se econtró: [");
+            }
+          case 62: break;
+          case 19: 
+            { System.out.println("Se econtró: ]");
+            }
+          case 63: break;
+          case 20: 
+            { yybegin(YYINITIAL);
+            }
+          case 64: break;
+          case 21: 
+            { yybegin(LINECOMMENT);
+            }
+          case 65: break;
+          case 22: 
             { commentLine = yyline+1; stComment++; yybegin(COMMENT);
             }
-          case 10: break;
-          case 4: 
-            { stComment++;
+          case 66: break;
+          case 23: 
+            { System.out.println("Utilizó */ sin abrirlo");
             }
-          case 11: break;
-          case 5: 
+          case 67: break;
+          case 24: 
+            { System.out.println("TYPE EXPR Se econtró: if");
+            }
+          case 68: break;
+          case 25: 
+            { System.out.println("BOOL Se econtró: <=");
+            }
+          case 69: break;
+          case 26: 
+            { System.out.println("BOOL Se econtró: >=");
+            }
+          case 70: break;
+          case 27: 
+            { System.out.println("BOOL Se econtró: ==");
+            }
+          case 71: break;
+          case 28: 
+            { System.out.println("BOOL Se econtró: !=");
+            }
+          case 72: break;
+          case 29: 
+            { System.out.println("Se econtró: ||");
+            }
+          case 73: break;
+          case 30: 
+            { System.out.println("Se econtró: &&");
+            }
+          case 74: break;
+          case 31: 
+            { System.out.println("TYPE Se econtró: do");
+            }
+          case 75: break;
+          case 32: 
             { stComment--; if(stComment==0) yybegin(YYINITIAL);
             }
-          case 12: break;
-          case 6: 
-            { System.out.println("ACA: "+yytext());
+          case 76: break;
+          case 33: 
+            { System.out.println("TYPE Se econtró: for");
             }
-          case 13: break;
-          case 7: 
-            { System.out.println("ABA: "+yytext());
+          case 77: break;
+          case 34: 
+            { System.out.println("Se econtró: int");
             }
-          case 14: break;
+          case 78: break;
+          case 35: 
+            { System.out.println("TRUE|FALSE Se econtró: "+yytext());
+            }
+          case 79: break;
+          case 36: 
+            { System.out.println("TYPE EXPR Se econtró: else");
+            }
+          case 80: break;
+          case 37: 
+            { System.out.println("Se econtró: int*");
+            }
+          case 81: break;
+          case 38: 
+            { System.out.println("Se econtró: char");
+            }
+          case 82: break;
+          case 39: 
+            { System.out.println("NULL Se econtró: NULL");
+            }
+          case 83: break;
+          case 40: 
+            { System.out.println("Se econtró: scanf");
+            }
+          case 84: break;
+          case 41: 
+            { System.out.println("Se econtró: char*");
+            }
+          case 85: break;
+          case 42: 
+            { System.out.println("TYPE Se econtró: while");
+            }
+          case 86: break;
+          case 43: 
+            { System.out.println("Se econtró: printf");
+            }
+          case 87: break;
+          case 44: 
+            { System.out.println("TYPE Se econtró: boolean");
+            }
+          case 88: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }

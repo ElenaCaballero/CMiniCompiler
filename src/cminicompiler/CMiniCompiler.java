@@ -28,8 +28,6 @@ public class CMiniCompiler {
             CMiniLexer lexer = new CMiniLexer(reader);
             lexer.next_token();
 
-            System.out.println("No errors.");
-
         } catch (Exception e) {
             e.printStackTrace(System.err);
             System.exit(1);

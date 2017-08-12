@@ -1,10 +1,18 @@
 estaba acaba carro
-/* 
+/*
 estaba
 Cualquier cosa 
 Lo	meh
+int
 estaba
 */
+2342342342
+null
+NULL null
+int true
+abaca
+char*
+int*
 
 //papaba
 aba cuajaba
