@@ -28,12 +28,10 @@ import java_cup.sym;
     StringBuffer string = new StringBuffer();
 
     private Symbol symbol(String name, int sym) {
-            System.out.println("name: " + name + " sym: " + sym);
             return new Symbol(sym, yyline, yycolumn);
     }
 
     private Symbol symbol(String name, int sym, Object val) {
-            System.out.println("name: " + name + " sym: " + sym + " val: " + val);
             return new Symbol(sym, yyline, yycolumn, val);
     }
 
@@ -51,23 +49,60 @@ boolean = "true"|"false"
 
 id = {letter}({letter}|{digit}|[_])*
 
-palabraACA ={letter}*aca{letter}*
-palabraABA ={letter}*aba{letter}*
-
 %state COMMENT
+%state LINECOMMENT
 
 %%
 <YYINITIAL>{
     "/*"                { commentLine = yyline+1; stComment++; yybegin(COMMENT); }
-    {palabraACA}	{ System.out.println("ACA: "+yytext()); }
-    {palabraABA}	{ System.out.println("ABA: "+yytext()); }
-    {space}       {}
-    .               {}
+    "*/"                { System.out.println("Utilizó */ sin abrirlo"); }
+    "//"                { yybegin(LINECOMMENT); }
+    "int"               { System.out.println("Se econtró: int"); }
+    "int*"              { System.out.println("Se econtró: int*"); }
+    "char"              { System.out.println("Se econtró: char"); }
+    "char*"             { System.out.println("Se econtró: char*"); }
+    "printf"            { System.out.println("Se econtró: printf"); }
+    "scanf"             { System.out.println("Se econtró: scanf"); }
+    "+"                 { System.out.println("ARTHM Se econtró: +"); }
+    "-"                 { System.out.println("ARTHM Se econtró: -"); }
+    "/"                 { System.out.println("ARTHM Se econtró: /"); }
+    "*"                 { System.out.println("ARTHM Se econtró: *"); }
+    ";"                 { System.out.println("Se econtró: ;"); }
+    "<"                 { System.out.println("BOOL Se econtró: <"); }
+    ">"                 { System.out.println("BOOL Se econtró: >"); }
+    "<="                { System.out.println("BOOL Se econtró: <="); }
+    ">="                { System.out.println("BOOL Se econtró: >="); }
+    "!="                { System.out.println("BOOL Se econtró: !="); }
+    "=="                { System.out.println("BOOL Se econtró: =="); }
+    ","                 { System.out.println("Se econtró: ,"); }
+    "."                 { System.out.println("Se econtró: ."); }
+    "("                 { System.out.println("Se econtró: )"); }
+    ")"                 { System.out.println("Se econtró: ("); }
+    "{"                 { System.out.println("Se econtró: {"); }
+    "}"                 { System.out.println("Se econtró: }"); }
+    "["                 { System.out.println("Se econtró: ["); }
+    "]"                 { System.out.println("Se econtró: ]"); }
+    "||"                { System.out.println("Se econtró: ||"); }
+    "&&"                { System.out.println("Se econtró: &&"); }
+    "for"               { System.out.println("TYPE Se econtró: for"); }
+    "while"             { System.out.println("TYPE Se econtró: while"); }
+    "do"                { System.out.println("TYPE Se econtró: do"); }
+    "if"                { System.out.println("TYPE EXPR Se econtró: if"); }
+    "else"              { System.out.println("TYPE EXPR Se econtró: else"); }
+    "boolean"           { System.out.println("TYPE Se econtró: boolean"); }
+    "NULL"              {  System.out.println("NULL Se econtró: NULL"); }
+    {boolean}           { System.out.println("TRUE|FALSE Se econtró: "+yytext()); }
+    {id}                { System.out.println("ID: "+yytext()); }
+    {integer}           { System.out.println("INTEGER: "+yytext()); }
+    {space}             { }
 }
 
 <COMMENT>{
-    "/*"    { stComment++; }
     "*/"    { stComment--; if(stComment==0) yybegin(YYINITIAL); }
     [^]     { }
 }
 
+<LINECOMMENT>{
+    "\n"    {yybegin(YYINITIAL);}
+    [^]     { }
+}
