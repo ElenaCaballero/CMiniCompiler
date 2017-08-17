@@ -49,11 +49,16 @@ boolean = "true"|"false"
 
 id = {letter}({letter}|{digit}|[_])*
 
+constchar = "'"({letter}* )*"'"
+conststr = """({letter}* )*""" | """({letter}* )*"\""({letter}* )*"\""({letter}* )*"""
+
 %state COMMENT
 %state LINECOMMENT
+%state STRING
 
 %%
 <YYINITIAL>{
+    \"			{ string.setLength(0); string.append( yytext() ); yybegin(STRING); }
     "/*"                { commentLine = yyline+1; stComment++; yybegin(COMMENT); }
     "*/"                { System.out.println("Utilizó */ sin abrirlo"); }
     "//"                { yybegin(LINECOMMENT); }
@@ -61,6 +66,10 @@ id = {letter}({letter}|{digit}|[_])*
     "int*"              { System.out.println("Se econtró: int*"); }
     "char"              { System.out.println("Se econtró: char"); }
     "char*"             { System.out.println("Se econtró: char*"); }
+    "boolean"           { System.out.println("Se econtró: boolean"); }
+    "conststr"          { System.out.println("Se econtró: conststr"); }
+    "constchar"         { System.out.println("Se econtró: constchar"); }
+    "void"              { System.out.println("Se econtró: void"); }
     "printf"            { System.out.println("Se econtró: printf"); }
     "scanf"             { System.out.println("Se econtró: scanf"); }
     "+"                 { System.out.println("ARTHM Se econtró: +"); }
@@ -89,8 +98,8 @@ id = {letter}({letter}|{digit}|[_])*
     "do"                { System.out.println("TYPE Se econtró: do"); }
     "if"                { System.out.println("TYPE EXPR Se econtró: if"); }
     "else"              { System.out.println("TYPE EXPR Se econtró: else"); }
-    "boolean"           { System.out.println("TYPE Se econtró: boolean"); }
-    "NULL"              {  System.out.println("NULL Se econtró: NULL"); }
+    "NULL"              { System.out.println("NULL Se econtró: NULL"); }
+    "null"              { System.out.println("NULL Se econtró: null"); }
     {boolean}           { System.out.println("TRUE|FALSE Se econtró: "+yytext()); }
     {id}                { System.out.println("ID: "+yytext()); }
     {integer}           { System.out.println("INTEGER: "+yytext()); }
@@ -106,3 +115,15 @@ id = {letter}({letter}|{digit}|[_])*
     "\n"    {yybegin(YYINITIAL);}
     [^]     { }
 }
+
+<STRING> {
+      \"                             { string.append( yytext() );
+                                       yybegin(YYINITIAL);
+                                       System.out.println("Sting literal: "+ string.toString()); }
+      [^\n\r\"\\]+                   { string.append( yytext() ); }
+      \\t                            { string.append('\t'); }
+      \\n                            { string.append('\n'); }
+      \\r                            { string.append('\r'); }
+      \\\"                           { string.append('\"'); }
+      \\                             { string.append('\\'); }
+ }
