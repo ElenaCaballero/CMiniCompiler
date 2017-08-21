@@ -2,7 +2,7 @@ estaba acaba carro
 /*
 estaba
 Cualquier cosa 
-Lo	meh
+Lo meh
 int
 "No"
 'Y'
@@ -22,3 +22,8 @@ int*
 //papaba
 aba cuajaba
 traba
+
+“HOLA Esto es conststring”
+‘a’
+
+“Hola \”hi\” es str”
