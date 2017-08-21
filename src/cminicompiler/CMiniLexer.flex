@@ -49,11 +49,16 @@ boolean = "true"|"false"
 
 id = {letter}({letter}|{digit}|[_])*
 
+constchar = "'"{letter}"'"|"'"(" ")"'"
+conststr = "\""({letter}|{space})*"\""
+
 %state COMMENT
 %state LINECOMMENT
+%state STRING
 
 %%
 <YYINITIAL>{
+    \"			{ string.setLength(0); string.append( yytext() ); yybegin(STRING); }
     "/*"                { commentLine = yyline+1; stComment++; yybegin(COMMENT); }
     "*/"                { System.out.println("Utilizó */ sin abrirlo"); }
     "//"                { yybegin(LINECOMMENT); }
@@ -61,6 +66,10 @@ id = {letter}({letter}|{digit}|[_])*
     "int*"              { System.out.println("Se econtró: int*"); }
     "char"              { System.out.println("Se econtró: char"); }
     "char*"             { System.out.println("Se econtró: char*"); }
+    "boolean"           { System.out.println("Se econtró: boolean"); }
+    "conststr"          { System.out.println("constr: "+ yytext()); }
+    "constchar"         { System.out.println("conschar: "+ yytext()); }
+    "void"              { System.out.println("Se econtró: void"); }
     "printf"            { System.out.println("Se econtró: printf"); }
     "scanf"             { System.out.println("Se econtró: scanf"); }
     "+"                 { System.out.println("ARTHM Se econtró: +"); }
@@ -82,6 +91,7 @@ id = {letter}({letter}|{digit}|[_])*
     "}"                 { System.out.println("Se econtró: }"); }
     "["                 { System.out.println("Se econtró: ["); }
     "]"                 { System.out.println("Se econtró: ]"); }
+    "#"                 { System.out.println("Se econtró: #"); }
     "||"                { System.out.println("Se econtró: ||"); }
     "&&"                { System.out.println("Se econtró: &&"); }
     "for"               { System.out.println("TYPE Se econtró: for"); }
@@ -89,12 +99,17 @@ id = {letter}({letter}|{digit}|[_])*
     "do"                { System.out.println("TYPE Se econtró: do"); }
     "if"                { System.out.println("TYPE EXPR Se econtró: if"); }
     "else"              { System.out.println("TYPE EXPR Se econtró: else"); }
-    "boolean"           { System.out.println("TYPE Se econtró: boolean"); }
-    "NULL"              {  System.out.println("NULL Se econtró: NULL"); }
+    "define"            { System.out.println("Se econtró: define"); }
+    "include"           { System.out.println("Se econtró: include"); }
+    "return"            { System.out.println("Se econtró: return"); }
+    "break"             { System.out.println("Se econtró: break"); }
+    "NULL"              { System.out.println("NULL Se econtró: NULL"); }
+    "null"              { System.out.println("NULL Se econtró: null"); }
     {boolean}           { System.out.println("TRUE|FALSE Se econtró: "+yytext()); }
     {id}                { System.out.println("ID: "+yytext()); }
     {integer}           { System.out.println("INTEGER: "+yytext()); }
     {space}             { }
+    .                   { System.out.println("No se reconoce el simbolo: "+yytext()); }
 }
 
 <COMMENT>{
@@ -106,3 +121,15 @@ id = {letter}({letter}|{digit}|[_])*
     "\n"    {yybegin(YYINITIAL);}
     [^]     { }
 }
+
+<STRING> {
+      \"                             { string.append( yytext() );
+                                       yybegin(YYINITIAL);
+                                       System.out.println("Sting literal: "+ string.toString()); }
+      [^\n\r\"\\]+                   { string.append( yytext() ); }
+      \\t                            { string.append('\t'); }
+      \\n                            { string.append('\n'); }
+      \\r                            { string.append('\r'); }
+      \\\"                           { string.append('\"'); }
+      \\                             { string.append('\\'); }
+ }
