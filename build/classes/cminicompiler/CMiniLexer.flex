@@ -52,13 +52,15 @@ id = {letter}({letter}|{digit}|[_])*
 constchar = "'"{letter}"'"|"'"(" ")"'"
 conststr = "\""({letter}|{space})*"\""
 
+printf = ("("{conststr}")")
+scanf = ("(""%d"")")|("(""%c"")")
+
 %state COMMENT
 %state LINECOMMENT
 %state STRING
 
 %%
 <YYINITIAL>{
-    \"			{ string.setLength(0); string.append( yytext() ); yybegin(STRING); }
     "/*"                { commentLine = yyline+1; stComment++; yybegin(COMMENT); }
     "*/"                { System.out.println("Utilizó */ sin abrirlo"); }
     "//"                { yybegin(LINECOMMENT); }
@@ -67,11 +69,11 @@ conststr = "\""({letter}|{space})*"\""
     "char"              { System.out.println("Se econtró: char"); }
     "char*"             { System.out.println("Se econtró: char*"); }
     "boolean"           { System.out.println("Se econtró: boolean"); }
-    "conststr"          { System.out.println("constr: "+ yytext()); }
-    "constchar"         { System.out.println("conschar: "+ yytext()); }
+    {conststr}          { System.out.println("conststr: "+ yytext()); }
+    {constchar}         { System.out.println("constchar: "+ yytext()); }
     "void"              { System.out.println("Se econtró: void"); }
-    "printf"            { System.out.println("Se econtró: printf"); }
-    "scanf"             { System.out.println("Se econtró: scanf"); }
+    {printf}            { System.out.println("Printf: "+yytext()); }
+    {scanf}             { System.out.println("Scanf: "+yytext()); }
     "+"                 { System.out.println("ARTHM Se econtró: +"); }
     "-"                 { System.out.println("ARTHM Se econtró: -"); }
     "/"                 { System.out.println("ARTHM Se econtró: /"); }
@@ -125,7 +127,7 @@ conststr = "\""({letter}|{space})*"\""
 <STRING> {
       \"                             { string.append( yytext() );
                                        yybegin(YYINITIAL);
-                                       System.out.println("Sting literal: "+ string.toString()); }
+                                       System.out.println("String literal: "+ string.toString()); }
       [^\n\r\"\\]+                   { string.append( yytext() ); }
       \\t                            { string.append('\t'); }
       \\n                            { string.append('\n'); }

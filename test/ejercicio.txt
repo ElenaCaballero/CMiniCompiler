@@ -1,4 +1,4 @@
-estaba acaba carro
+﻿estaba acaba carro
 /*
 estaba
 Cualquier cosa 
@@ -8,7 +8,7 @@ int
 'Y'
 estaba
 */
-" Y WA"
+" Y		WA"
 'A'
 'Ff'
 2342342342
@@ -18,12 +18,13 @@ int true
 abaca
 char*
 int*
-
+/JA
 //papaba
+
 aba cuajaba
 traba
 
-“HOLA Esto es conststring”
-‘a’
+"HOLA Esto es conststring"
+'a'
 
-“Hola \”hi\” es str”
+"Hola \"hi\" es str"
