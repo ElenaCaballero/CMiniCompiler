@@ -52,8 +52,9 @@ id = {letter}({letter}|{digit}|[_])*
 constchar = "'"{letter}"'"|"'"(" ")"'"
 conststr = "\""({letter}|{space})*"\""
 
-printf = ("("{conststr}")")
-scanf = ("(""%d"")")|("(""%c"")")
+arthmexpSUM = ("+")|("-")
+arthmexpMULT = ("*")|("/")
+boolexp = ("<")|(">")|("<=")|(">=")|("!=")|("==")                
 
 %state COMMENT
 %state LINECOMMENT
@@ -72,19 +73,12 @@ scanf = ("(""%d"")")|("(""%c"")")
     {conststr}          { System.out.println("conststr: "+ yytext()); }
     {constchar}         { System.out.println("constchar: "+ yytext()); }
     "void"              { System.out.println("Se econtró: void"); }
-    {printf}            { System.out.println("Printf: "+yytext()); }
-    {scanf}             { System.out.println("Scanf: "+yytext()); }
-    "+"                 { System.out.println("ARTHM Se econtró: +"); }
-    "-"                 { System.out.println("ARTHM Se econtró: -"); }
-    "/"                 { System.out.println("ARTHM Se econtró: /"); }
-    "*"                 { System.out.println("ARTHM Se econtró: *"); }
+    "printf"            { System.out.println("printf"); }
+    "scanf"             { System.out.println("scanf"); }
+    {arthmexpSUM}       { System.out.println("Arithmetic expresion for SUM: "+yytext()); }
+    {arthmexpMULT}      { System.out.println("Arithmetic expresion for MULTIPLICATION: "+yytext()); }
+    {boolexp}           { System.out.println("Boolean Expresion: "+yytext()); }
     ";"                 { System.out.println("Se econtró: ;"); }
-    "<"                 { System.out.println("BOOL Se econtró: <"); }
-    ">"                 { System.out.println("BOOL Se econtró: >"); }
-    "<="                { System.out.println("BOOL Se econtró: <="); }
-    ">="                { System.out.println("BOOL Se econtró: >="); }
-    "!="                { System.out.println("BOOL Se econtró: !="); }
-    "=="                { System.out.println("BOOL Se econtró: =="); }
     ","                 { System.out.println("Se econtró: ,"); }
     "."                 { System.out.println("Se econtró: ."); }
     "("                 { System.out.println("Se econtró: )"); }
