@@ -62,6 +62,7 @@ boolexp = ("<")|(">")|("<=")|(">=")|("!=")|("==")
 
 %%
 <YYINITIAL>{
+    \"			{ string.setLength(0); string.append( yytext() ); yybegin(STRING); }    
     "/*"                { commentLine = yyline+1; stComment++; yybegin(COMMENT); }
     "*/"                { System.out.println("Utilizó */ sin abrirlo"); }
     "//"                { yybegin(LINECOMMENT); }
