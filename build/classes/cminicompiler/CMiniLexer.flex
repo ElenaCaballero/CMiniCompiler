@@ -1,9 +1,6 @@
 package cminicompiler;
 
 import java_cup.runtime.*;
-import java_cup.runtime.Symbol;
-import java_cup.runtime.ComplexSymbolFactory;
-import java_cup.runtime.ComplexSymbolFactory.Location;
 import java.io.Reader;
 import java_cup.sym;
 
@@ -13,7 +10,6 @@ import java_cup.sym;
 %unicode
 %int
 %cup
-%standalone
 %line
 %column
 %eofval{
@@ -45,16 +41,20 @@ digit = [0-9]
 space = (" "|"\t"|"\n")+
 
 integer = {digit}+
-boolean = "true"|"false"
+boolToF = 0|1
 
 id = {letter}({letter}|{digit}|[_])*
 
 constchar = "'"{letter}"'"|"'"(" ")"'"
-conststr = "\""({letter}|{space})*"\""
 
 arthmexpSUM = ("+")|("-")
 arthmexpMULT = ("*")|("/")
-boolexp = ("<")|(">")|("<=")|(">=")|("!=")|("==")                
+boolexp = ("<")|(">")|("<=")|(">=")|("!=")|("==")
+
+int = "int"|"int*"|"int *"
+char = "char"|"char*"|"char *"    
+
+null = "null"|"NULL"             
 
 %state COMMENT
 %state LINECOMMENT
@@ -66,47 +66,43 @@ boolexp = ("<")|(">")|("<=")|(">=")|("!=")|("==")
     "/*"                { commentLine = yyline+1; stComment++; yybegin(COMMENT); }
     "*/"                { System.out.println("Utilizó */ sin abrirlo"); }
     "//"                { yybegin(LINECOMMENT); }
-    "int"               { System.out.println("Se econtró: int"); }
-    "int*"              { System.out.println("Se econtró: int*"); }
-    "char"              { System.out.println("Se econtró: char"); }
-    "char*"             { System.out.println("Se econtró: char*"); }
-    "boolean"           { System.out.println("Se econtró: boolean"); }
-    {conststr}          { System.out.println("conststr: "+ yytext()); }
-    {constchar}         { System.out.println("constchar: "+ yytext()); }
-    "void"              { System.out.println("Se econtró: void"); }
-    "printf"            { System.out.println("printf"); }
-    "scanf"             { System.out.println("scanf"); }
-    {arthmexpSUM}       { System.out.println("Arithmetic expresion for SUM: "+yytext()); }
-    {arthmexpMULT}      { System.out.println("Arithmetic expresion for MULTIPLICATION: "+yytext()); }
-    {boolexp}           { System.out.println("Boolean Expresion: "+yytext()); }
-    ";"                 { System.out.println("Se econtró: ;"); }
-    ","                 { System.out.println("Se econtró: ,"); }
-    "."                 { System.out.println("Se econtró: ."); }
-    "("                 { System.out.println("Se econtró: )"); }
-    ")"                 { System.out.println("Se econtró: ("); }
-    "{"                 { System.out.println("Se econtró: {"); }
-    "}"                 { System.out.println("Se econtró: }"); }
-    "["                 { System.out.println("Se econtró: ["); }
-    "]"                 { System.out.println("Se econtró: ]"); }
-    "#"                 { System.out.println("Se econtró: #"); }
-    "||"                { System.out.println("Se econtró: ||"); }
-    "&&"                { System.out.println("Se econtró: &&"); }
-    "for"               { System.out.println("TYPE Se econtró: for"); }
-    "while"             { System.out.println("TYPE Se econtró: while"); }
-    "do"                { System.out.println("TYPE Se econtró: do"); }
-    "if"                { System.out.println("TYPE EXPR Se econtró: if"); }
-    "else"              { System.out.println("TYPE EXPR Se econtró: else"); }
-    "define"            { System.out.println("Se econtró: define"); }
-    "include"           { System.out.println("Se econtró: include"); }
-    "return"            { System.out.println("Se econtró: return"); }
-    "break"             { System.out.println("Se econtró: break"); }
-    "NULL"              { System.out.println("NULL Se econtró: NULL"); }
-    "null"              { System.out.println("NULL Se econtró: null"); }
-    {boolean}           { System.out.println("TRUE|FALSE Se econtró: "+yytext()); }
-    {id}                { System.out.println("ID: "+yytext()); }
-    {integer}           { System.out.println("INTEGER: "+yytext()); }
+    {int}               { return symbol("int",sym.INT,yytext()); }
+    {char}              { return symbol("char",sym.CHAR,yytext()); }
+    "boolean"           { return symbol("boolean",sym.BOOLEAN); }
+    {constchar}         { return symbol("constchar",sym.CONSTCHAR,yytext()); }
+    "void"              { return symbol("void",sym.VOID); }
+    "printf"            { return symbol("printf",sym.PRINTF); }
+    "scanf"             { return symbol("scanf",sym.SCANF); }
+    {arthmexpSUM}       { return symbol("arthmexpSUM",sym.ARTHMEXPSUM,yytext()); }
+    {arthmexpMULT}      { return symbol("arthmexpMULT",sym.ARTHMEXPMULT,yytext()); }
+    {boolexp}           { return symbol("boolexp",sym.BOOLEXP,yytext()); }
+    ";"                 { return symbol(";",sym.SEMICOLON); }
+    ":"                 { return symbol(":",sym.COLON); }
+    ","                 { return symbol(",",sym.COMMA); }
+    "."                 { return symbol(".",sym.DOT); }
+    "("                 { return symbol("(",sym.LEFTPRNTH); }
+    ")"                 { return symbol(")",sym.RIGTHPRNTH); }
+    "{"                 { return symbol("{",sym.LEFTCBRAC); }
+    "}"                 { return symbol("}",sym.RIGHTCBRAC); }
+    "["                 { return symbol("[",sym.LEFTBRAK); }
+    "]"                 { return symbol("]",sym.RIGHTBRAK); }
+    "#"                 { return symbol("#",sym.NUMERAL); }
+    "||"                { return symbol("||",sym.OR); }
+    "&&"                { return symbol("&&",sym.AND); }
+    "for"               { return symbol("for",sym.FOR); }
+    "while"             { return symbol("while",sym.WHILE); }
+    "do"                { return symbol("do",sym.DO); }
+    "if"                { return symbol("if",sym.IF); }
+    "else"              { return symbol("else",sym.ELSE); }
+    "define"            { return symbol("define",sym.DEFINE); }
+    "include"           { return symbol("include",sym.INCLUDE); }
+    "return"            { return symbol("return",sym.RETURN); }
+    "break"             { return symbol("break",sym.BREAK); }
+    {null}              { return symbol("null",sym.NULL,yytext()); }
+    {boolToF}           { return symbol("boolToF",sym.BOOLTOF,yytext()); }
+    {id}                { return symbol("id",sym.ID,yytext()); }
     {space}             { }
-    .                   { System.out.println("No se reconoce el simbolo: "+yytext()); }
+    .                   { System.out.println("ERROR! No se reconoce el simbolo: "+yytext()); }
 }
 
 <COMMENT>{
@@ -120,9 +116,8 @@ boolexp = ("<")|(">")|("<=")|(">=")|("!=")|("==")
 }
 
 <STRING> {
-      \"                             { string.append( yytext() );
-                                       yybegin(YYINITIAL);
-                                       System.out.println("String literal: "+ string.toString()); }
+      \"                             { yybegin(YYINITIAL);
+                                       return symbol(sym.STRING_LITERAL,string.toString()); }
       [^\n\r\"\\]+                   { string.append( yytext() ); }
       \\t                            { string.append('\t'); }
       \\n                            { string.append('\n'); }
