@@ -13,18 +13,10 @@ import java.io.File;
  */
 public class LexerGenerator {
     public static void main(String[] args) {
-        String paramsLexer[] = new String[3];
-        paramsLexer[0] = "-d";
-        paramsLexer[1] = "src/cminicompiler/";
-        paramsLexer[2] = "src/cminicompiler/CMiniLexer.flex";
         try {
-            jflex.Main.generate(paramsLexer);
+            jflex.Main.generate(new File("src/cminicompiler/CMiniLexer.flex"));
         } catch (Exception e) {
+            System.out.println("AQUI EN LEXER GENERATOR");
         }
-    }
-    
-    public static void generateLexer(String path) {
-        File file = new File(path);
-        jflex.Main.generate(file);
     }
 }
