@@ -1,6 +1,8 @@
 package cminicompiler;
 
 import java_cup.runtime.*;
+import java_cup.*
+import java.io.IOException;;
 
 
 %% 
@@ -9,12 +11,6 @@ import java_cup.runtime.*;
 %int
 %cup
 
-%eofval{
-    if(stComment!=0){
-        System.out.println("Comment started at line " + commentLine + " is not finished");
-    }
-%eofval}
-%eofclose
 %{
     int stComment = 0;
     int commentLine;

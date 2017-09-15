@@ -1,6 +1,7 @@
 package cminicompiler;
 
 import java_cup.runtime.*;
+import java.io.Reader;
 
 terminal INT, CHAR, BOOLEAN, CONSTCHAR, 
     VOID, PRINTF, SCANF, ARTHMEXPSUM, ARTHMEXPMULT, 
@@ -10,4 +11,6 @@ terminal INT, CHAR, BOOLEAN, CONSTCHAR,
     DEFINE, INCLUDE, RETURN, BREAK, NULL, BOOLTOF, ID,
     DECIMALINT, SINGLECHAR, CHAR_CONST, INT_CONST;
 terminal String STRING_LITERAL;
+
+non terminal Integer S;
 
