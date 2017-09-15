@@ -5,8 +5,6 @@
         <group>
             <file>file:/Users/elenacaballero/Desktop/UNITEC/15Trimestre2017/CompiladoresI/Proyecto/CMiniCompiler/src/cminicompiler/CMiniCompiler.java</file>
             <file>file:/Users/elenacaballero/Desktop/UNITEC/15Trimestre2017/CompiladoresI/Proyecto/CMiniCompiler/src/cminicompiler/CMiniLexer.flex</file>
-            <file>file:/Users/elenacaballero/Desktop/UNITEC/15Trimestre2017/CompiladoresI/Proyecto/CMiniCompiler/src/cminicompiler/CupGenerator.java</file>
-            <file>file:/Users/elenacaballero/Desktop/UNITEC/15Trimestre2017/CompiladoresI/Proyecto/CMiniCompiler/src/cminicompiler/LexerGenerator.java</file>
             <file>file:/Users/elenacaballero/Desktop/UNITEC/15Trimestre2017/CompiladoresI/Proyecto/CMiniCompiler/src/cminicompiler/CMiniSyntax.cup</file>
         </group>
     </open-files>
