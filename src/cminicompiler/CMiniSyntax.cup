@@ -12,5 +12,11 @@ terminal INT, CHAR, BOOLEAN, CONSTCHAR,
     DECIMALINT, SINGLECHAR, CHAR_CONST, INT_CONST;
 terminal String STRING_LITERAL;
 
-non terminal Integer S;
+non terminal S;
+non terminal E;
+
+S ::= E:e     {:System.out.println(e);:}
+        ;
+E ::= INT {:RESULT = 1;:}
+    ;
 

@@ -1,7 +1,7 @@
 package cminicompiler;
 
 import java_cup.runtime.*;
-import java_cup.*
+import java_cup.*;
 import java.io.IOException;;
 
 
@@ -16,11 +16,11 @@ import java.io.IOException;;
     int commentLine;
     StringBuffer string = new StringBuffer();
 
-    private Symbol symbol(String name, int sym) {
+    private Symbol symbol(int sym) {
             return new Symbol(sym, yyline, yycolumn);
     }
 
-    private Symbol symbol(String name, int sym, Object val) {
+    private Symbol symbol(int sym, Object val) {
             return new Symbol(sym, yyline, yycolumn, val);
     }
 
@@ -60,45 +60,45 @@ null = "null"|"NULL"
     "/*"                { commentLine = yyline+1; stComment++; yybegin(COMMENT); }
     "*/"                { System.out.println("Utilizó */ sin abrirlo"); }
     "//"                { yybegin(LINECOMMENT); }
-    {int}               { return symbol("int", sym.INT,yytext()); }
-    {char}              { return symbol("char", sym.CHAR,yytext()); }
-    "boolean"           { return symbol("boolean", sym.BOOLEAN); }
-    {constchar}         { return symbol("constchar", sym.CONSTCHAR,yytext()); }
-    "void"              { return symbol("void", sym.VOID); }
-    "printf"            { return symbol("printf", sym.PRINTF); }
-    "scanf"             { return symbol("scanf", sym.SCANF); }
-    {arthmexpSUM}       { return symbol("arthmexpSUM", sym.ARTHMEXPSUM,yytext()); }
-    {arthmexpMULT}      { return symbol("arthmexpMULT", sym.ARTHMEXPMULT,yytext()); }
-    {boolexp}           { return symbol("boolexp", sym.BOOLEXP,yytext()); }
-    ";"                 { return symbol(";", sym.SEMICOLON); }
-    ":"                 { return symbol(":", sym.COLON); }
-    ","                 { return symbol(",", sym.COMMA); }
-    "."                 { return symbol(".", sym.DOT); }
-    "("                 { return symbol("(", sym.LEFTPRNTH); }
-    ")"                 { return symbol(")", sym.RIGTHPRNTH); }
-    "{"                 { return symbol("{", sym.LEFTCBRAC); }
-    "}"                 { return symbol("}", sym.RIGHTCBRAC); }
-    "["                 { return symbol("[", sym.LEFTBRAK); }
-    "]"                 { return symbol("]", sym.RIGHTBRAK); }
-    "#"                 { return symbol("#", sym.NUMERAL); }
-    "%d"                { return symbol("%d", sym.DECIMALINT);}
-    "%c"                { return symbol("%c", sym.SINGLECHAR);}
-    "||"                { return symbol("||", sym.OR); }
-    "&&"                { return symbol("&&", sym.AND); }
-    "for"               { return symbol("for", sym.FOR); }
-    "while"             { return symbol("while", sym.WHILE); }
-    "do"                { return symbol("do", sym.DO); }
-    "if"                { return symbol("if", sym.IF); }
-    "else"              { return symbol("else", sym.ELSE); }
-    "define"            { return symbol("define", sym.DEFINE); }
-    "include"           { return symbol("include", sym.INCLUDE); }
-    "return"            { return symbol("return", sym.RETURN); }
-    "break"             { return symbol("break", sym.BREAK); }
-    {null}              { return symbol("null", sym.NULL, yytext()); }
-    {boolToF}           { return symbol("boolToF", sym.BOOLTOF, yytext()); }
-    {letter}		{ return symbol("charconst", sym.CHAR_CONST, yytext()); }
-    {integer}		{ return symbol("integerconst", sym.INT_CONST, yytext()); }
-    {id}                { return symbol("id", sym.ID, yytext()); }
+    {int}               { return symbol(sym.INT,yytext()); }
+    {char}              { return symbol(sym.CHAR,yytext()); }
+    "boolean"           { return symbol(sym.BOOLEAN); }
+    {constchar}         { return symbol(sym.CONSTCHAR,yytext()); }
+    "void"              { return symbol(sym.VOID); }
+    "printf"            { return symbol(sym.PRINTF); }
+    "scanf"             { return symbol(sym.SCANF); }
+    {arthmexpSUM}       { return symbol(sym.ARTHMEXPSUM,yytext()); }
+    {arthmexpMULT}      { return symbol(sym.ARTHMEXPMULT,yytext()); }
+    {boolexp}           { return symbol(sym.BOOLEXP,yytext()); }
+    ";"                 { return symbol(sym.SEMICOLON); }
+    ":"                 { return symbol(sym.COLON); }
+    ","                 { return symbol(sym.COMMA); }
+    "."                 { return symbol(sym.DOT); }
+    "("                 { return symbol(sym.LEFTPRNTH); }
+    ")"                 { return symbol(sym.RIGTHPRNTH); }
+    "{"                 { return symbol(sym.LEFTCBRAC); }
+    "}"                 { return symbol(sym.RIGHTCBRAC); }
+    "["                 { return symbol(sym.LEFTBRAK); }
+    "]"                 { return symbol(sym.RIGHTBRAK); }
+    "#"                 { return symbol(sym.NUMERAL); }
+    "%d"                { return symbol(sym.DECIMALINT);}
+    "%c"                { return symbol(sym.SINGLECHAR);}
+    "||"                { return symbol(sym.OR); }
+    "&&"                { return symbol(sym.AND); }
+    "for"               { return symbol(sym.FOR); }
+    "while"             { return symbol(sym.WHILE); }
+    "do"                { return symbol(sym.DO); }
+    "if"                { return symbol(sym.IF); }
+    "else"              { return symbol(sym.ELSE); }
+    "define"            { return symbol(sym.DEFINE); }
+    "include"           { return symbol(sym.INCLUDE); }
+    "return"            { return symbol(sym.RETURN); }
+    "break"             { return symbol(sym.BREAK); }
+    {null}              { return symbol(sym.NULL, yytext()); }
+    {boolToF}           { return symbol(sym.BOOLTOF, yytext()); }
+    {letter}		{ return symbol(sym.CHAR_CONST, yytext()); }
+    {integer}		{ return symbol(sym.INT_CONST, yytext()); }
+    {id}                { return symbol(sym.ID, yytext()); }
     {space}             { }
     .                   { error("Illegal character <"+ yytext()+"> @ Line " + (yyline+1)); }
 }
@@ -116,7 +116,7 @@ null = "null"|"NULL"
 <STRING> {
       \"                             { string.append( yytext() ); 
                                        yybegin(YYINITIAL);
-                                       return symbol("string literal", sym.STRING_LITERAL, string.toString()); }
+                                       return symbol(sym.STRING_LITERAL, string.toString()); }
       [^\n\r\"\\]+                   { string.append( yytext() ); }
       \\t                            { string.append('\t'); }
       \\n                            { string.append('\n'); }

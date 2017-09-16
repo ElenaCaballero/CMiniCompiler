@@ -5,14 +5,10 @@
  */
 package cminicompiler;
 
-import java.io.FileReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java_cup.Lexer;
-import java_cup.parser;
+import java_cup.*;
 
 /**
  *
@@ -23,8 +19,8 @@ public class CMiniCompiler {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        String file = "./test/ejercicio.txt";
+    public static void main(String[] args) throws FileNotFoundException {
+        String file = "src/cminicompiler/ejercicio.txt";
         buildLexer();
         buildParser();
         runFile(file);
@@ -52,15 +48,14 @@ public class CMiniCompiler {
     }
 
     private static void runFile(String file) {
-        
         try {
-            parser parser = new parser(new Lexer(new FileReader(file)));
-            parser.parse();
+            parser p = new parser(new CMiniLexer(new FileReader(file)));
+            p.parse(); 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(CMiniCompiler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(CMiniCompiler.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }   
     }
     
 }
