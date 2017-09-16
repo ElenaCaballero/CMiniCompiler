@@ -2,6 +2,36 @@ package cminicompiler;
 
 import java_cup.runtime.*;
 import java.io.Reader;
+import classes.*;
+
+parser code {:
+
+	public CMiniProgram root = null;
+
+	public void report_error(String message, Object info) {
+		StringBuilder m = new StringBuilder("Sintax Error");
+		if (info instanceof java_cup.runtime.Symbol) {
+			java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
+			if (s.left >= 0) {
+				m.append(" at line "+(s.left+1));
+				if (s.right >= 0)
+					m.append(", column "+(s.right+1));
+			}
+		}
+		m.append(" : "+message);
+		System.err.println(m);
+	}
+
+	public void report_fatal_error(String message, Object info) {
+		report_error(message, info);
+		System.exit(1);
+	}
+
+	public void syntax_error(Symbol cur_token) {
+		report_error("on Token "+ cur_token.value, cur_token);
+	}
+
+:};
 
 terminal INT, CHAR, BOOLEAN, CONSTCHAR, 
     VOID, PRINTF, SCANF, ARTHMEXPSUM, ARTHMEXPMULT, 
@@ -9,14 +39,32 @@ terminal INT, CHAR, BOOLEAN, CONSTCHAR,
     RIGTHPRNTH, LEFTCBRAC, RIGHTCBRAC, LEFTBRAK, 
     RIGHTBRAK, NUMERAL, OR, AND, FOR, WHILE, DO, IF, ELSE, 
     DEFINE, INCLUDE, RETURN, BREAK, NULL, BOOLTOF, ID,
-    DECIMALINT, SINGLECHAR, CHAR_CONST, INT_CONST;
+    DECIMALINT, SINGLECHAR, CHAR_CONST, INT_CONST, MAIN;
 terminal String STRING_LITERAL;
 
-non terminal S;
-non terminal E;
+non terminal CMiniProgram cMiniProgram;
+non terminal MainCluase mainCluase;
+non terminal FunctionList functionList;
+non terminal Arguments arguments;
+non terminal Expression expression;
+non terminal Type type;
 
-S ::= E:e     {:System.out.println(e);:}
-        ;
-E ::= INT {:RESULT = 1;:}
-    ;
+start with cMiniProgram;
+
+cMiniProgram ::= mainCluase:mc functionList:fl {:
+					CMiniProgram r = new CMiniProgram(mc, fl);
+					RESULT = r;
+					parser.root = RESULT;
+				:}
+				;
+
+mainCluase :: = type:i MAIN:m LEFTPRNTH arguments:a RIGTHPRNTH LEFTCBRAC expression:e RIGHTCBRAC {:
+					MainCluase r = new MainCluase(i, m, a, e);
+					RESULT = r;
+				:}
+				;
+
+
+
+
 

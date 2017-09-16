@@ -20,10 +20,17 @@ public class CMiniCompiler {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws FileNotFoundException {
-        String file = "src/cminicompiler/ejercicio.txt";
         buildLexer();
         buildParser();
-        runFile(file);
+        
+        try {
+            parser p = new parser(new CMiniLexer(new FileReader("src/cminicompiler/ejercicio.txt")));
+            p.parse(); 
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(CMiniCompiler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(CMiniCompiler.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private static void buildLexer() {
@@ -47,15 +54,5 @@ public class CMiniCompiler {
         }
     }
 
-    private static void runFile(String file) {
-        try {
-            parser p = new parser(new CMiniLexer(new FileReader(file)));
-            p.parse(); 
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(CMiniCompiler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(CMiniCompiler.class.getName()).log(Level.SEVERE, null, ex);
-        }   
-    }
     
 }

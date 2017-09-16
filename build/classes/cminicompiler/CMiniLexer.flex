@@ -65,6 +65,7 @@ null = "null"|"NULL"
     "boolean"           { return symbol(sym.BOOLEAN); }
     {constchar}         { return symbol(sym.CONSTCHAR,yytext()); }
     "void"              { return symbol(sym.VOID); }
+    "main"              { return symbol(sym.MAIN); }
     "printf"            { return symbol(sym.PRINTF); }
     "scanf"             { return symbol(sym.SCANF); }
     {arthmexpSUM}       { return symbol(sym.ARTHMEXPSUM,yytext()); }

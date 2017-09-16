@@ -1,0 +1,22 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package classes;
+
+/**
+ *
+ * @author elenacaballero
+ */
+public class CMiniProgram {
+    MainClause mainClause;
+    FunctionList functionList;
+
+    public CMiniProgram(MainClause mainClause, FunctionList functionList) {
+        this.mainClause = mainClause;
+        this.functionList = functionList;
+    }
+    
+    
+}
