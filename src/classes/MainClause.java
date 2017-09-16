@@ -11,7 +11,7 @@ import java.beans.Expression;
  *
  * @author elenacaballero
  */
-class MainClause {
+public class MainClause {
     Type i;
     String main;
     Arguments arguments;

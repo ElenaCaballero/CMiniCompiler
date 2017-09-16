@@ -43,27 +43,42 @@ terminal INT, CHAR, BOOLEAN, CONSTCHAR,
 terminal String STRING_LITERAL;
 
 non terminal CMiniProgram cMiniProgram;
-non terminal MainCluase mainCluase;
+non terminal MainClause mainClause;
 non terminal FunctionList functionList;
 non terminal Arguments arguments;
 non terminal Expression expression;
 non terminal Type type;
 
+//Declaración de Variables
+
+non terminal String varDeclarePART;
+non terminal String varDeclare;
+non terminal String myType;
+
+
 start with cMiniProgram;
 
-cMiniProgram ::= mainCluase:mc functionList:fl {:
+cMiniProgram ::= mainClause:mc functionList:fl {:
 					CMiniProgram r = new CMiniProgram(mc, fl);
 					RESULT = r;
 					parser.root = RESULT;
 				:}
 				;
 
-mainCluase :: = type:i MAIN:m LEFTPRNTH arguments:a RIGTHPRNTH LEFTCBRAC expression:e RIGHTCBRAC {:
-					MainCluase r = new MainCluase(i, m, a, e);
+mainClause ::= type:i MAIN:m LEFTPRNTH arguments:a RIGTHPRNTH LEFTCBRAC expression:e RIGHTCBRAC {:
+					MainClause r = new MainClause(i, m, a, e);
 					RESULT = r;
 				:}
 				;
 
+varDeclarePART ::= varDeclare:var   {: RESULT = var; :}
+                    ;
+varDeclare ::= myType:t ID:id       {: RESULT = t + id; :}
+              ;
+myType ::= INT:i                    {: RESULT = i ; :}
+        | CHAR:c                    {: RESULT = c ; :}
+        | BOOLEAN:b                 {: RESULT = b ; :}
+        ;
 
 
 

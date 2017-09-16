@@ -9,6 +9,6 @@ package classes;
  *
  * @author elenacaballero
  */
-class Type {
+public class Type {
     
 }

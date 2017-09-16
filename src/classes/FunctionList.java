@@ -9,6 +9,6 @@ package classes;
  *
  * @author elenacaballero
  */
-class FunctionList {
+public class FunctionList {
     
 }
