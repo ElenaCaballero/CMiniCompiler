@@ -70,16 +70,16 @@ mainClause ::= type:i MAIN:m LEFTPRNTH arguments:a RIGTHPRNTH LEFTCBRAC expressi
 					RESULT = r;
 				:}
 				;
-
-varDeclarePART ::= varDeclare:var   {: RESULT = var; :}
+///////////////
+varDeclarePART ::= varDeclare:var SEMICOLON:sC  {: RESULT = var + sC; :}
                     ;
-varDeclare ::= myType:t ID:id       {: RESULT = t + id; :}
+varDeclare ::= myType:t ID:id       {: RESULT = t +" "+ id; :}
               ;
 myType ::= INT:i                    {: RESULT = i ; :}
         | CHAR:c                    {: RESULT = c ; :}
         | BOOLEAN:b                 {: RESULT = b ; :}
         ;
-
+///////////////
 
 
 
