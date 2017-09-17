@@ -36,8 +36,8 @@ parser code {:
 terminal INT, CHAR, BOOLEAN, CONSTCHAR, 
     VOID, PRINTF, SCANF, ARTHMEXPSUM, ARTHMEXPMULT, 
     BOOLEXP, SEMICOLON, COLON, COMMA, DOT, LEFTPRNTH, 
-    RIGTHPRNTH, LEFTCBRAC, RIGHTCBRAC, LEFTBRAK, 
-    RIGHTBRAK, NUMERAL, OR, AND, FOR, WHILE, DO, IF, ELSE, 
+    RIGTHPRNTH, LEFTCBRAC, RIGHTCBRAC, LEFTBRAK, RIGHTBRAK, 
+    EQUAL, NUMERAL, OR, AND, FOR, WHILE, DO, IF, ELSE, 
     DEFINE, INCLUDE, RETURN, BREAK, NULL, BOOLTOF, ID,
     DECIMALINT, SINGLECHAR, CHAR_CONST, INT_CONST, MAIN;
 terminal String STRING_LITERAL;
@@ -53,10 +53,13 @@ non terminal Expression expression;
 non terminal Expressions expressions;
 non terminal Type type;
 non terminal ReturnStatement returnStatement;
+non terminal VariableDeclaration variableDeclaration;
+non terminal Statements statements;
+non terminal Scanners scanners;
+non terminal Printers printers;
+non terminal Variables variables;
+non terminal Value value;
 
-//Declaración de Variables
-non terminal VarDeclare varDeclare;
-non terminal List list;
 
 
 start with cMiniProgram;
@@ -138,36 +141,84 @@ expressions ::= expressions:es SEMICOLON expression:e SEMICOLON returnStatement:
 				:}
 				;
 
-expression ::= 
-
-///////////////
-
-varDeclare ::= list:l SEMICOLON {: 
-								VarDeclare r = new VarDeclare(l);
-								RESULT = r; 
-						:}
-              ;
-type ::= INT:i  {: 
-								Type r = new Type(i);
-								RESULT = r ; 
+expression ::= variableDeclaration:vd {:
+					Expression r = new Expression(vd);
+					RESULT = r;
 				:}
-        | CHAR:c  {: 	
-		        				Type r = new Type(c);
-								RESULT = r ; 
+				| statements:s {:
+					Expression r = new Expression(s);
+					RESULT = r;
 				:}
-        | BOOLEAN:b {: 	
-		    					Type r = new Type(b); 
-								RESULT = r ; 
+				| scanners:s {:
+					Expression r = new Expression(s);
+					RESULT = r;
+				:}
+				| printers:p {:
+					Expression r = new Expression(p);
+					RESULT = r;
+				:}
+				;
+
+returnStatement ::= RETURN:ret ID:id {:
+						ReturnStatement r = new ReturnStatement(ret, (String)id);
+						RESULT = r;
 					:}
-        ;
-list ::= list:l COMMA ID:i {:
-								List r = new List(l.tipo);
-							:}
-		| type:t ID:i 		{:
-								List r = new List(t);
-							:}
-		;
-///////////////
+					| RETURN:ret NUMERAL:num {:
+						ReturnStatement r = new ReturnStatement(ret, num); 
+						RESULT = r;
+					:}
+					| RETURN:ret NULL:n {:
+						ReturnStatement r = new ReturnStatement(ret, (String)n); 
+						RESULT = r;
+					:}
+					| {:
+						RESULT = null;
+					:}
+					;
+
+variableDeclaration ::= type:t variables:v SEMICOLON {:
+							VariableDeclaration r = new VariableDeclaration(t, v);
+							RESULT = r;
+						:}
+						;
+
+variables ::= ID:id {:
+					Variables r = new Variables(id);
+					RESULT = r;
+				:}
+			  	| ID:id COMMA variables:v {:
+		  			Variables r = new Variables(id, v);
+		  			RESULT = r;
+		  		:}
+			  	| ID:id EQUAL value:val {:
+		  			Variables r = new Variables(id, val);
+		  			RESULT = r;
+		  		:}
+			  	| ID:id EQUAL value:val COMMA variables:v {:
+			  		Variables r = new Variables(id, val, v);
+			  		RESULT = r;
+		  		:}
+			  	;
+
+statements ::= IF
+				|WHILE
+				|FOR
+				;
+
+scanners ::= SCANF
+			;
+
+printers ::= PRINTF
+				|PRINTF
+				;
+
+value ::= NUMERAL
+			|STRING_LITERAL
+			|BOOLTOF
+			|NULL
+			;
+
+
 
 
 

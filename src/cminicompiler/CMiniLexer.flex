@@ -81,6 +81,7 @@ null = "null"|"NULL"
     "}"                 { return symbol(sym.RIGHTCBRAC); }
     "["                 { return symbol(sym.LEFTBRAK); }
     "]"                 { return symbol(sym.RIGHTBRAK); }
+    "="                 { return symbol(sym.EQUAL); }
     "#"                 { return symbol(sym.NUMERAL); }
     "%d"                { return symbol(sym.DECIMALINT);}
     "%c"                { return symbol(sym.SINGLECHAR);}
@@ -97,8 +98,8 @@ null = "null"|"NULL"
     "break"             { return symbol(sym.BREAK); }
     {null}              { return symbol(sym.NULL, yytext()); }
     {boolToF}           { return symbol(sym.BOOLTOF, yytext()); }
-    {letter}		{ return symbol(sym.CHAR_CONST, yytext()); }
-    {integer}		{ return symbol(sym.INT_CONST, yytext()); }
+    {letter}		    { return symbol(sym.CHAR_CONST, yytext()); }
+    {integer}		    { return symbol(sym.INT_CONST, yytext()); }
     {id}                { return symbol(sym.ID, yytext()); }
     {space}             { }
     .                   { error("Illegal character <"+ yytext()+"> @ Line " + (yyline+1)); }

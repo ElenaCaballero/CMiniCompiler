@@ -10,5 +10,24 @@ package classes;
  * @author elenacaballero
  */
 class Expression {
-    
+    VariableDeclaration variableDeclaration;
+    Statements statements;
+    Scanners scanners;
+    Printers printers;
+
+    public Expression(VariableDeclaration variableDeclaration) {
+        this.variableDeclaration = variableDeclaration;
+    }
+
+    public Expression(Statements statements) {
+        this.statements = statements;
+    }
+
+    public Expression(Scanners scanners) {
+        this.scanners = scanners;
+    }
+
+    public Expression(Printers printers) {
+        this.printers = printers;
+    }
 }

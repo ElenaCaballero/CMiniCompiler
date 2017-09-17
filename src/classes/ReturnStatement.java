@@ -10,5 +10,18 @@ package classes;
  * @author elenacaballero
  */
 class ReturnStatement {
+    String ret;
+    String id;
+    int num;
+
+    public ReturnStatement(String ret, String id) {
+        this.ret = ret;
+        this.id = id;
+    }
+
+    public ReturnStatement(String ret, int num) {
+        this.ret = ret;
+        this.num = num;
+    }
     
 }
