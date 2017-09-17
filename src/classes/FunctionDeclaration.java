@@ -5,23 +5,18 @@
  */
 package classes;
 
-
 /**
  *
  * @author elenacaballero
  */
-public class MainClause {
-    Type i;
-    String main;
+class FunctionDeclaration {
+    Type type;
+    String id;
     ArgumentList argumentlist;
-    Expressions expressions;
 
-    public MainClause(Type i, String main, ArgumentList argumentlist, Expressions expressions) {
-        this.i = i;
-        this.main = main;
+    public FunctionDeclaration(Type type, String id, ArgumentList argumentlist) {
+        this.type = type;
+        this.id = id;
         this.argumentlist = argumentlist;
-        this.expressions = expressions;
     }
-    
-	
 }

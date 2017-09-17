@@ -44,44 +44,129 @@ terminal String STRING_LITERAL;
 
 non terminal CMiniProgram cMiniProgram;
 non terminal MainClause mainClause;
+non terminal FunctionDeclaration functionDeclaration;
 non terminal FunctionList functionList;
-non terminal Arguments arguments;
+non terminal Function function;
+non terminal Argument argument;
+non terminal ArgumentList argumentList;
 non terminal Expression expression;
+non terminal Expressions expressions;
 non terminal Type type;
+non terminal ReturnStatement returnStatement;
 
 //Declaración de Variables
-
-non terminal String varDeclarePart;
-non terminal String varDeclare;
+non terminal VarDeclare varDeclare;
 non terminal List list;
 
 
 start with cMiniProgram;
 
-cMiniProgram ::= mainClause:mc functionList:fl {:
-					CMiniProgram r = new CMiniProgram(mc, fl);
+cMiniProgram ::= functionDeclaration:fd mainClause:mc functionList:fl {:
+					CMiniProgram r = new CMiniProgram(fd, mc, fl);
 					RESULT = r;
 					parser.root = RESULT;
 				:}
 				;
 
-mainClause ::= type:i MAIN:m LEFTPRNTH arguments:a RIGTHPRNTH LEFTCBRAC expression:e RIGHTCBRAC {:
-					MainClause r = new MainClause(i, m, a, e);
+mainClause ::= type:i MAIN:m LEFTPRNTH argumentList:a RIGTHPRNTH LEFTCBRAC expressions:e RIGHTCBRAC {:
+					MainClause r = new MainClause(i, (String)m, a, e);
 					RESULT = r;
 				:}
 				;
+
+functionDeclaration ::= type:t ID:id LEFTPRNTH argumentList:a RIGTHPRNTH {:
+					FunctionDeclaration r = new FunctionDeclaration(t, (String)id, a);
+					RESULT = r;
+				:}
+				|{:
+					RESULT = null;
+				:}
+				;
+
+functionList ::= function:f functionList:fl {:
+					FunctionList r = new FunctionList(fl, f);
+					RESULT = r;
+				:}
+				| function:f {:
+					FunctionList r = new FunctionList(f);
+					RESULT = r; 
+				:}
+				|{:
+					RESULT = null;
+				:}
+				;
+
+function ::= type:t ID:id LEFTPRNTH argumentList:a RIGTHPRNTH LEFTCBRAC expressions:e RIGHTCBRAC {:
+					Function r = new Function(t, (String)id, a, e);
+					RESULT = r;
+				:}
+				;
+
+argumentList ::= argument:a COMMA argumentList:al {:
+					ArgumentList r = new ArgumentList(a, al);
+					RESULT = r;
+				:}
+				| argument:a {:
+					ArgumentList r = new ArgumentList(a);
+					RESULT = r;
+				:}
+				|{:
+					RESULT = null;
+				:}
+				;
+
+argument ::= type:t ID:id  {:
+					Argument r = new Argument(t, (String)id);
+					RESULT = r;
+				:}
+				;
+
+expressions ::= expressions:es SEMICOLON expression:e SEMICOLON returnStatement:rs SEMICOLON {:
+					Expressions r = new Expressions(es, e, rs);
+					RESULT = r;
+				:}
+				| expression:e SEMICOLON returnStatement:rs SEMICOLON {:
+					Expressions r = new Expressions(e, rs);
+					RESULT = r;
+				:}
+				| returnStatement:rs SEMICOLON {:
+					Expressions r = new Expressions(rs);
+					RESULT = r;
+				:}
+				|{:
+					RESULT = null;
+				:}
+				;
+
+expression ::= 
+
 ///////////////
-varDeclarePart ::= varDeclare:var SEMICOLON:sC  {: RESULT = var + sC; :}
-                    ;
-varDeclare ::= type:t list:l        {: RESULT = t.tipo +" "+ l.tipo; :}
+
+varDeclare ::= list:l SEMICOLON {: 
+								VarDeclare r = new VarDeclare(l);
+								RESULT = r; 
+						:}
               ;
-type ::= INT:i                      {: RESULT = (String)i ; :}
-        | CHAR:c                    {: RESULT = (String)c ; :}
-        | BOOLEAN:b                 {: RESULT = (String)b ; :}
+type ::= INT:i  {: 
+								Type r = new Type(i);
+								RESULT = r ; 
+				:}
+        | CHAR:c  {: 	
+		        				Type r = new Type(c);
+								RESULT = r ; 
+				:}
+        | BOOLEAN:b {: 	
+		    					Type r = new Type(b); 
+								RESULT = r ; 
+					:}
         ;
-list ::= list:l COMMA ID:id          {: RESULT = l.tipo+","+(String)id; :}
-        | ID:id                     {: RESULT = (String)id; :}
-        ;
+list ::= list:l COMMA ID:i {:
+								List r = new List(l.tipo);
+							:}
+		| type:t ID:i 		{:
+								List r = new List(t);
+							:}
+		;
 ///////////////
 
 

@@ -10,5 +10,17 @@ package classes;
  * @author elenacaballero
  */
 public class FunctionList {
+    FunctionList functionlist;
+    Function function;
+
+    public FunctionList(FunctionList functionlist, Function function) {
+        this.functionlist = functionlist;
+        this.function = function;
+    }
+
+    public FunctionList(Function function) {
+        this.function = function;
+    }
+    
     
 }

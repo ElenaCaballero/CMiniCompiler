@@ -9,6 +9,6 @@ package classes;
  *
  * @author elenacaballero
  */
-public class Arguments {
+class ReturnStatement {
     
 }
