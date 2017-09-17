@@ -7,13 +7,11 @@ package classes;
 
 /**
  *
- * @author elenacaballero
+ * @author User
  */
-public class Type {
-    String tipo;
-
-    public Type(String tipo) {
-        this.tipo = tipo;
+public class List {
+    Type tipo;
+    List(Type type){
+        tipo = type;
     }
-
 }

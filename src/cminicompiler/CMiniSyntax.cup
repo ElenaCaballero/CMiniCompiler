@@ -51,9 +51,9 @@ non terminal Type type;
 
 //Declaración de Variables
 
-non terminal String varDeclarePART;
+non terminal String varDeclarePart;
 non terminal String varDeclare;
-non terminal String myType;
+non terminal List list;
 
 
 start with cMiniProgram;
@@ -71,13 +71,16 @@ mainClause ::= type:i MAIN:m LEFTPRNTH arguments:a RIGTHPRNTH LEFTCBRAC expressi
 				:}
 				;
 ///////////////
-varDeclarePART ::= varDeclare:var SEMICOLON:sC  {: RESULT = var + sC; :}
+varDeclarePart ::= varDeclare:var SEMICOLON:sC  {: RESULT = var + sC; :}
                     ;
-varDeclare ::= myType:t ID:id       {: RESULT = t +" "+ id; :}
+varDeclare ::= type:t list:l        {: RESULT = t.tipo +" "+ l.tipo; :}
               ;
-myType ::= INT:i                    {: RESULT = i ; :}
-        | CHAR:c                    {: RESULT = c ; :}
-        | BOOLEAN:b                 {: RESULT = b ; :}
+type ::= INT:i                      {: RESULT = (String)i ; :}
+        | CHAR:c                    {: RESULT = (String)c ; :}
+        | BOOLEAN:b                 {: RESULT = (String)b ; :}
+        ;
+list ::= list:l COMMA ID:id          {: RESULT = l.tipo+","+(String)id; :}
+        | ID:id                     {: RESULT = (String)id; :}
         ;
 ///////////////
 
