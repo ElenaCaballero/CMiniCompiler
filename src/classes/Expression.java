@@ -14,6 +14,7 @@ class Expression {
     Statements statements;
     Scanners scanners;
     Printers printers;
+    String breakE;
 
     public Expression(VariableDeclaration variableDeclaration) {
         this.variableDeclaration = variableDeclaration;
@@ -30,4 +31,10 @@ class Expression {
     public Expression(Printers printers) {
         this.printers = printers;
     }
+
+    public Expression(String breakE) {
+        this.breakE = breakE;
+    }
+    
+    
 }

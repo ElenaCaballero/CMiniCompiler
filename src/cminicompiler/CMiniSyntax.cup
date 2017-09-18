@@ -35,11 +35,11 @@ parser code {:
 
 terminal INT, CHAR, BOOLEAN, CONSTCHAR, CONSTSTR, 
     VOID, PRINTF, SCANF, ARTHMEXPSUM, ARTHMEXPMULT, 
-    BOOLEXP, SEMICOLON, COLON, COMMA, DOT, LEFTPRNTH, 
+    BOOLEXP, SEMICOLON, COMMA, LEFTPRNTH, 
     RIGHTPRNTH, LEFTCBRAC, RIGHTCBRAC, LEFTBRAK, RIGHTBRAK, 
-    EQUAL, NUMERAL, OR, AND, FOR, WHILE, DO, IF, ELSE, 
-    DEFINE, INCLUDE, RETURN, BREAK, NULL, BOOLTOF, ID,
-    DECIMALINT, SINGLECHAR, CHAR_CONST, INT_CONST, MAIN;
+    EQUAL, NUMERAL, OR, AND, FOR, WHILE, IF, ELSE, 
+    RETURN, BREAK, NULL, BOOLTOF, ID, DECIMALINT, SINGLECHAR,
+    LETTER, INTEGER, MAIN;
 terminal String STRING_LITERAL;
 
 non terminal CMiniProgram cMiniProgram;
@@ -65,10 +65,9 @@ non terminal Condition condition;
 non terminal WhileStatement whileStatement;
 non terminal ForStatement forStatement;
 non terminal Inits inits;
-non terminal ArthmExp arthmExp;
+non terminal ForArthmExp forArthmExp;
 non terminal AndOr andOr;
-
-
+non terminal ArithmeticExp arithmeticExp; 
 
 start with cMiniProgram;
 
@@ -163,6 +162,10 @@ expression ::= variableDeclaration:vd {:
 				:}
 				| printers:p {:
 					Expression r = new Expression(p);
+					RESULT = r;
+				:}
+				| BREAK:b {:
+					Expression r = new Expression(b);
 					RESULT = r;
 				:}
 				;
@@ -309,33 +312,48 @@ type ::= INT:i {:
 			Type r = new Type(cS);
 			RESULT = r;
 		:}
+		| VOID:v {:
+			Type r = new Type(v);
+			RESULT = r;
+		:}
 		;
 
 whileStatement ::= WHILE:w LEFTPRNTH condition:c RIGHTPRNTH LEFTCBRAC expressions:e RIGHTCBRAC {:
-					WhileStatement r = new WhileStatement(w,c,e);
+					WhileStatement r = new WhileStatement((String)w, c, e);
 					RESULT = r;
 				:}
 				;
 
-forStatement ::= FOR:f LEFTPRNTH inits:i SEMICOLON condition:c SEMICOLON arthmExp:aE RIGHTPRNTH LEFTCBRAC expressions:e RIGHTCBRAC{:
-					ForStatement r = new ForStatement(f,i,c,aE,e);
+forStatement ::= FOR:f LEFTPRNTH inits:i SEMICOLON condition:c SEMICOLON forArthmExp:aE RIGHTPRNTH LEFTCBRAC expressions:e RIGHTCBRAC{:
+					ForStatement r = new ForStatement((String)f, i, c, aE, e);
 					RESULT = r;
 				:}
 				;
 
 inits ::= INT:i ID:id EQUAL value:v {:
-			Inits r = new Inits(i,id,v); //ACORDARSE QUE EL INT NO ES INT*
+			Inits r = new Inits((String)i, (String)id,v); //ACORDARSE QUE EL INT NO ES INT*
 			RESULT = r;
 		:}
 		;
 
-arthmExp ::= ID:id ARTHMEXPSUM:aES1 ARTHMEXPSUM:aES2 {:
+forArthmExp ::= ID:id ARTHMEXPSUM:aES1 ARTHMEXPSUM:aES2 {:
 				if(aES1 == aES2){
-					ArthmExp r = new ArthmExp(id,aES1,aES2);
+					ForArthmExp r = new ForArthmExp((String)id, (String)aES1, (String)aES2);
 					RESULT = r;
 				}else{
-					ERR;// REVISAR COMO TIRAR ERRORES SIN QUE QUIEBRE
+					System.err.println("error"));;// REVISAR COMO TIRAR ERRORES SIN QUE QUIEBRE
 				}
 			:}
+			| ID:id ARTHMEXPSUM:aES NUMERAL:num {:
+				ForArthmExp r = new ForArthmExp((String)id, (String)aES, num);
+			:}
+			| ID:id ARTHMEXPMULT:aES NUMERAL:num {:
+				ForArthmExp r = new ForArthmExp((String)id, (String)aES, num);
+			:}
 			;
+
+arithmeticExp ::= ARTHMEXPSUM 
+					|ARTHMEXPMULT
+					;
+
 

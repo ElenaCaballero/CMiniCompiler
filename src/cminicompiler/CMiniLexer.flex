@@ -4,7 +4,6 @@ import java_cup.runtime.*;
 import java_cup.*;
 import java.io.IOException;;
 
-
 %% 
 %class CMiniLexer
 %unicode
@@ -64,7 +63,6 @@ null = "null"|"NULL"
     {char}              { return symbol(sym.CHAR,yytext()); }
     "boolean"           { return symbol(sym.BOOLEAN); }
     "conststr"          { return symbol(sym.CONSTSTR); }
-    {constchar}         { return symbol(sym.CONSTCHAR,yytext()); }
     "void"              { return symbol(sym.VOID); }
     "main"              { return symbol(sym.MAIN); }
     "printf"            { return symbol(sym.PRINTF); }
@@ -73,9 +71,7 @@ null = "null"|"NULL"
     {arthmexpMULT}      { return symbol(sym.ARTHMEXPMULT,yytext()); }
     {boolexp}           { return symbol(sym.BOOLEXP,yytext()); }
     ";"                 { return symbol(sym.SEMICOLON); }
-    ":"                 { return symbol(sym.COLON); }
     ","                 { return symbol(sym.COMMA); }
-    "."                 { return symbol(sym.DOT); }
     "("                 { return symbol(sym.LEFTPRNTH); }
     ")"                 { return symbol(sym.RIGHTPRNTH); }
     "{"                 { return symbol(sym.LEFTCBRAC); }
@@ -90,17 +86,15 @@ null = "null"|"NULL"
     "&&"                { return symbol(sym.AND); }
     "for"               { return symbol(sym.FOR); }
     "while"             { return symbol(sym.WHILE); }
-    "do"                { return symbol(sym.DO); }
     "if"                { return symbol(sym.IF); }
     "else"              { return symbol(sym.ELSE); }
-    "define"            { return symbol(sym.DEFINE); }
-    "include"           { return symbol(sym.INCLUDE); }
     "return"            { return symbol(sym.RETURN); }
     "break"             { return symbol(sym.BREAK); }
     {null}              { return symbol(sym.NULL, yytext()); }
     {boolToF}           { return symbol(sym.BOOLTOF, yytext()); }
-    {letter}		{ return symbol(sym.CHAR_CONST, yytext()); }
-    {integer}		{ return symbol(sym.INT_CONST, yytext()); }
+    {constchar}         { return symbol(sym.CONSTCHAR,yytext()); }
+    {letter}		{ return symbol(sym.LETTER, yytext()); }
+    {integer}		{ return symbol(sym.INTEGER, yytext()); }
     {id}                { return symbol(sym.ID, yytext()); }
     {space}             { }
     .                   { error("Illegal character <"+ yytext()+"> @ Line " + (yyline+1)); }

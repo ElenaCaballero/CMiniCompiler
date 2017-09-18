@@ -10,5 +10,20 @@ package classes;
  * @author elenacaballero
  */
 class Statements {
+    IfStatement ifStatement;
+    WhileStatement whileStatement;
+    ForStatement forStatement;
+
+    public Statements(IfStatement ifStatement) {
+        this.ifStatement = ifStatement;
+    }
+
+    public Statements(WhileStatement whileStatement) {
+        this.whileStatement = whileStatement;
+    }
+
+    public Statements(ForStatement forStatement) {
+        this.forStatement = forStatement;
+    }
     
 }

@@ -9,16 +9,13 @@ package classes;
  *
  * @author elenacaballero
  */
-class Value {
-    String value;
-    int intValue;
+class AndOR {
+    String s;
+    Condition c;
 
-    public Value(String value) {
-        this.value = value;
-    }
-
-    public Value(int intValue) {
-        this.intValue = intValue;
+    public AndOR(String s, Condition c) {
+        this.s = s;
+        this.c = c;
     }
     
     

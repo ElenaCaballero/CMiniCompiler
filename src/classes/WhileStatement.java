@@ -9,16 +9,15 @@ package classes;
  *
  * @author elenacaballero
  */
-class Value {
-    String value;
-    int intValue;
+class WhileStatement {
+    String whileS;
+    Condition c;
+    Expressions e;
 
-    public Value(String value) {
-        this.value = value;
-    }
-
-    public Value(int intValue) {
-        this.intValue = intValue;
+    public WhileStatement(String whileS, Condition c, Expressions e) {
+        this.whileS = whileS;
+        this.c = c;
+        this.e = e;
     }
     
     

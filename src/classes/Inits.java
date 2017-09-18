@@ -9,16 +9,14 @@ package classes;
  *
  * @author elenacaballero
  */
-class Value {
-    String value;
-    int intValue;
+class Inits {
+    String type, id;
+    Value val;
 
-    public Value(String value) {
-        this.value = value;
-    }
-
-    public Value(int intValue) {
-        this.intValue = intValue;
+    public Inits(String type, String id, Value val) {
+        this.type = type;
+        this.id = id;
+        this.val = val;
     }
     
     
