@@ -76,7 +76,7 @@ null = "null"|"NULL"
     ","                 { return symbol(sym.COMMA); }
     "."                 { return symbol(sym.DOT); }
     "("                 { return symbol(sym.LEFTPRNTH); }
-    ")"                 { return symbol(sym.RIGTHPRNTH); }
+    ")"                 { return symbol(sym.RIGHTPRNTH); }
     "{"                 { return symbol(sym.LEFTCBRAC); }
     "}"                 { return symbol(sym.RIGHTCBRAC); }
     "["                 { return symbol(sym.LEFTBRAK); }

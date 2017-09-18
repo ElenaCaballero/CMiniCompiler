@@ -36,7 +36,7 @@ parser code {:
 terminal INT, CHAR, BOOLEAN, CONSTCHAR, 
     VOID, PRINTF, SCANF, ARTHMEXPSUM, ARTHMEXPMULT, 
     BOOLEXP, SEMICOLON, COLON, COMMA, DOT, LEFTPRNTH, 
-    RIGTHPRNTH, LEFTCBRAC, RIGHTCBRAC, LEFTBRAK, RIGHTBRAK, 
+    RIGHTPRNTH, LEFTCBRAC, RIGHTCBRAC, LEFTBRAK, RIGHTBRAK, 
     EQUAL, NUMERAL, OR, AND, FOR, WHILE, DO, IF, ELSE, 
     DEFINE, INCLUDE, RETURN, BREAK, NULL, BOOLTOF, ID,
     DECIMALINT, SINGLECHAR, CHAR_CONST, INT_CONST, MAIN;
@@ -59,6 +59,14 @@ non terminal Scanners scanners;
 non terminal Printers printers;
 non terminal Variables variables;
 non terminal Value value;
+non terminal IfStatement ifStatement;
+non terminal ElseStatement elseStatement;
+non terminal Condition condition;
+non terminal WhileStatement whileStatement;
+non terminal ForStatement forStatement;
+non terminal Inits inits;
+non terminal ArthmExp arthmExp;
+non terminal AndOr andOr;
 
 
 
@@ -71,13 +79,13 @@ cMiniProgram ::= functionDeclaration:fd mainClause:mc functionList:fl {:
 				:}
 				;
 
-mainClause ::= type:i MAIN:m LEFTPRNTH argumentList:a RIGTHPRNTH LEFTCBRAC expressions:e RIGHTCBRAC {:
+mainClause ::= type:i MAIN:m LEFTPRNTH argumentList:a RIGHTPRNTH LEFTCBRAC expressions:e RIGHTCBRAC {:
 					MainClause r = new MainClause(i, (String)m, a, e);
 					RESULT = r;
 				:}
 				;
 
-functionDeclaration ::= type:t ID:id LEFTPRNTH argumentList:a RIGTHPRNTH {:
+functionDeclaration ::= type:t ID:id LEFTPRNTH argumentList:a RIGHTPRNTH {:
 					FunctionDeclaration r = new FunctionDeclaration(t, (String)id, a);
 					RESULT = r;
 				:}
@@ -99,7 +107,7 @@ functionList ::= function:f functionList:fl {:
 				:}
 				;
 
-function ::= type:t ID:id LEFTPRNTH argumentList:a RIGTHPRNTH LEFTCBRAC expressions:e RIGHTCBRAC {:
+function ::= type:t ID:id LEFTPRNTH argumentList:a RIGHTPRNTH LEFTCBRAC expressions:e RIGHTCBRAC {:
 					Function r = new Function(t, (String)id, a, e);
 					RESULT = r;
 				:}
@@ -200,25 +208,134 @@ variables ::= ID:id {:
 		  		:}
 			  	;
 
-statements ::= IF
-				|WHILE
-				|FOR
+statements ::= ifStatement:ifs 	{: 
+					Statements r = new Statements(ifs);
+					RESULT = r; 
+				:}	
+				|whileStatement:wS {:
+					Statements r = new Statements(wS);
+					RESULT = r; 	
+				:}
+				|forStatement:fS {:
+					Statements r = new Statements(fS);
+					RESULT = r; 	
+				:}
 				;
 
-scanners ::= SCANF
-			;
-
-printers ::= PRINTF
-				|PRINTF
+ifStatement ::= IF:i LEFTPRNTH condition:c RIGHTPRNTH LEFTCBRAC expressions:e RIGHTCBRAC elseStatement:eS {:
+					IfStatement r = new IfStatement((String)i,c,e,eS);
+					RESULT = r;
+				:}
+				| IF:i LEFTPRNTH condition:c RIGHTPRNTH LEFTCBRAC expressions:e RIGHTCBRAC{:
+					IfStatement r = new IfStatement((String)i,c,e);
+					RESULT = r;
+				:}
 				;
 
-value ::= NUMERAL
-			|STRING_LITERAL
-			|BOOLTOF
-			|NULL
+elseStatement ::= ELSE:eS LEFTCBRAC expressions:e RIGHTCBRAC {: 
+					ElseStatement r = new ElseStatement(eS,e);
+					RESULT = r;
+				:}
+				| ELSE:e ifStatement:ifS {:
+					IfStatement r = new IfStatement(e,ifS);
+					RESULT = r;
+				:}
+				;
+
+condition ::= value:v1 BOOLEXP:b value:v2 {:
+				Condition r = new Condition(v1,b,v2);
+				RESULT = r;
+			:}
+			| value:v1 BOOLEXP:b value:v2 andOr:aO {:
+				Condition r = new Condition(v1,b,v2,aO);
+				RESULT = r;
+			:}
 			;
 
+andOr ::= AND:a condition:c {:
+			RESULT = new AndOR(a,c);
+		:}
+		| OR:o condition:c {:
+			RESULT = new AndOR(o,c);
+		:}
+		;
 
+scanners ::= SCANF:sf LEFTPRNTH STRING_LITERAL:sl COMMA variables:v RIGHTPRNTH SEMICOLON {:
+				Scanners r= new Scanners(sf,sl,v);
+				RESULT = r;
+			:}
+			;
 
+printers ::= PRINTF:pf LEFTPRNTH STRING_LITERAL:sl RIGHTPRNTH SEMICOLON {:
+				Printers r = new Printers(pf,sl);
+				RESULT = r;
+			:}
+			|PRINTF:pf LEFTPRNTH STRING_LITERAL:sl COMMA variables:v RIGHTPRNTH SEMICOLON{:
+				Printers r= new Printers(pf,sl,v);
+				RESULT = r;
+			:}
+			;
 
+value ::= ID:id {:
+				RESULT = new Value(id);
+			:}
+			|NUMERAL:num {:
+				RESULT = new Value(num);
+			:}
+			|STRING_LITERAL:sl {:
+				RESULT = new Value(sl);
+			:}
+			|BOOLTOF:tF {:
+				RESULT = new Value(tF);
+			:}
+			|NULL:n {:
+				RESULT = new Value(n);
+			:}
+			;
+
+type ::= INT:i {:
+			Type r = new Type(i);
+			RESULT = r;
+		:}
+		| CHAR:c {:
+			Type r = new Type(c);
+			RESULT = r;
+		:}
+		| BOOLEAN:b {:
+			Type r = new Type(b);
+			RESULT = r;
+		:}
+		| CHAR_CONST:cC {:
+			Type r = new Type(cC);
+			RESULT = r;
+		:}
+		;
+
+whileStatement ::= WHILE:w LEFTPRNTH condition:c RIGHTPRNTH LEFTCBRAC expressions:e RIGHTCBRAC {:
+					WhileStatement r = new WhileStatement(w,c,e);
+					RESULT = r;
+				:}
+				;
+
+forStatement ::= FOR:f LEFTPRNTH inits:i SEMICOLON condition:c SEMICOLON arthmExp:aE RIGHTPRNTH LEFTCBRAC expressions:e RIGHTCBRAC{:
+					ForStatement r = new ForStatement(f,i,c,aE,e);
+					RESULT = r;
+				:}
+				;
+
+inits ::= INT:i ID:id EQUAL value:v {:
+			Inits r = new Inits(i,id,v); //ACORDARSE QUE EL INT NO ES INT*
+			RESULT = r;
+		:}
+		;
+
+arthmExp ::= ID:id ARTHMEXPSUM:aES1 ARTHMEXPSUM:aES2 {:
+				if(aES1 == aES2){
+					ArthmExp r = new ArthmExp(id,aES1,aES2);
+					RESULT = r;
+				}else{
+					ERR;// REVISAR COMO TIRAR ERRORES SIN QUE QUIEBRE
+				}
+			:}
+			;
 
