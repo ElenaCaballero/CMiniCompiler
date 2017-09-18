@@ -63,6 +63,7 @@ null = "null"|"NULL"
     {int}               { return symbol(sym.INT,yytext()); }
     {char}              { return symbol(sym.CHAR,yytext()); }
     "boolean"           { return symbol(sym.BOOLEAN); }
+    "conststr"          { return symbol(sym.CONSTSTR); }
     {constchar}         { return symbol(sym.CONSTCHAR,yytext()); }
     "void"              { return symbol(sym.VOID); }
     "main"              { return symbol(sym.MAIN); }
@@ -98,8 +99,8 @@ null = "null"|"NULL"
     "break"             { return symbol(sym.BREAK); }
     {null}              { return symbol(sym.NULL, yytext()); }
     {boolToF}           { return symbol(sym.BOOLTOF, yytext()); }
-    {letter}		    { return symbol(sym.CHAR_CONST, yytext()); }
-    {integer}		    { return symbol(sym.INT_CONST, yytext()); }
+    {letter}		{ return symbol(sym.CHAR_CONST, yytext()); }
+    {integer}		{ return symbol(sym.INT_CONST, yytext()); }
     {id}                { return symbol(sym.ID, yytext()); }
     {space}             { }
     .                   { error("Illegal character <"+ yytext()+"> @ Line " + (yyline+1)); }

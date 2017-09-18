@@ -33,7 +33,7 @@ parser code {:
 
 :};
 
-terminal INT, CHAR, BOOLEAN, CONSTCHAR, 
+terminal INT, CHAR, BOOLEAN, CONSTCHAR, CONSTSTR, 
     VOID, PRINTF, SCANF, ARTHMEXPSUM, ARTHMEXPMULT, 
     BOOLEXP, SEMICOLON, COLON, COMMA, DOT, LEFTPRNTH, 
     RIGHTPRNTH, LEFTCBRAC, RIGHTCBRAC, LEFTBRAK, RIGHTBRAK, 
@@ -305,8 +305,8 @@ type ::= INT:i {:
 			Type r = new Type(b);
 			RESULT = r;
 		:}
-		| CHAR_CONST:cC {:
-			Type r = new Type(cC);
+		| CONSTSTR:cS {:
+			Type r = new Type(cS);
 			RESULT = r;
 		:}
 		;
