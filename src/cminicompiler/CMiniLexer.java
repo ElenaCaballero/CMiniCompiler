@@ -395,11 +395,11 @@ class CMiniLexer implements java_cup.runtime.Scanner {
     int commentLine;
     StringBuffer string = new StringBuffer();
 
-    private Symbol symbol(int sym) {
+    private Symbol symbol(String name, int sym) {
             return new Symbol(sym, yyline, yycolumn);
     }
 
-    private Symbol symbol(int sym, Object val) {
+    private Symbol symbol(String name, int sym, Object val) {
             return new Symbol(sym, yyline, yycolumn, val);
     }
 
@@ -798,11 +798,11 @@ class CMiniLexer implements java_cup.runtime.Scanner {
             }
           case 50: break;
           case 2: 
-            { return symbol(sym.ID, yytext());
+            { return symbol("id", sym.ID, yytext());
             }
           case 51: break;
           case 3: 
-            { return symbol(sym.INTEGER, yytext());
+            { return symbol("integer", sym.INTEGER, yytext());
             }
           case 52: break;
           case 4: 
@@ -810,27 +810,27 @@ class CMiniLexer implements java_cup.runtime.Scanner {
             }
           case 53: break;
           case 5: 
-            { return symbol(sym.BOOLTOF, yytext());
+            { return symbol("boolToF", sym.BOOLTOF, yytext());
             }
           case 54: break;
           case 6: 
-            { return symbol(sym.ARTHMEXPSUM,yytext());
+            { return symbol("arthmExpSUM", sym.ARTHMEXPSUM,yytext());
             }
           case 55: break;
           case 7: 
-            { return symbol(sym.ASTERISK);
+            { return symbol("*", sym.ASTERISK);
             }
           case 56: break;
           case 8: 
-            { return symbol(sym.ARTHMEXPMULT,yytext());
+            { return symbol("arthmExpMULT", sym.ARTHMEXPMULT,yytext());
             }
           case 57: break;
           case 9: 
-            { return symbol(sym.BOOLEXP,yytext());
+            { return symbol("boolexp", sym.BOOLEXP,yytext());
             }
           case 58: break;
           case 10: 
-            { return symbol(sym.EQUALS);
+            { return symbol("=", sym.EQUALS);
             }
           case 59: break;
           case 11: 
@@ -838,31 +838,31 @@ class CMiniLexer implements java_cup.runtime.Scanner {
             }
           case 60: break;
           case 12: 
-            { return symbol(sym.SEMICOLON);
+            { return symbol(";", sym.SEMICOLON);
             }
           case 61: break;
           case 13: 
-            { return symbol(sym.COMMA);
+            { return symbol(",", sym.COMMA);
             }
           case 62: break;
           case 14: 
-            { return symbol(sym.LEFTPRNTH);
+            { return symbol("(", sym.LEFTPRNTH);
             }
           case 63: break;
           case 15: 
-            { return symbol(sym.RIGHTPRNTH);
+            { return symbol(")", sym.RIGHTPRNTH);
             }
           case 64: break;
           case 16: 
-            { return symbol(sym.LEFTCBRAC);
+            { return symbol("{", sym.LEFTCBRAC);
             }
           case 65: break;
           case 17: 
-            { return symbol(sym.RIGHTCBRAC);
+            { return symbol("}", sym.RIGHTCBRAC);
             }
           case 66: break;
           case 18: 
-            { return symbol(sym.AMPERSAND);
+            { return symbol("&", sym.AMPERSAND);
             }
           case 67: break;
           case 19: 
@@ -876,7 +876,7 @@ class CMiniLexer implements java_cup.runtime.Scanner {
           case 21: 
             { string.append( yytext() ); 
                                        yybegin(YYINITIAL);
-                                       return symbol(sym.CONSTSTR, string.toString());
+                                       return symbol("conststr", sym.CONSTSTR, string.toString());
             }
           case 70: break;
           case 22: 
@@ -896,23 +896,23 @@ class CMiniLexer implements java_cup.runtime.Scanner {
             }
           case 74: break;
           case 26: 
-            { return symbol(sym.IF);
+            { return symbol("if", sym.IF);
             }
           case 75: break;
           case 27: 
-            { return symbol(sym.AND);
+            { return symbol("&&", sym.AND);
             }
           case 76: break;
           case 28: 
-            { return symbol(sym.DECIMALINT);
+            { return symbol("%d", sym.DECIMALINT);
             }
           case 77: break;
           case 29: 
-            { return symbol(sym.SINGLECHAR);
+            { return symbol("%c", sym.SINGLECHAR);
             }
           case 78: break;
           case 30: 
-            { return symbol(sym.OR);
+            { return symbol("||", sym.OR);
             }
           case 79: break;
           case 31: 
@@ -936,59 +936,59 @@ class CMiniLexer implements java_cup.runtime.Scanner {
             }
           case 84: break;
           case 36: 
-            { return symbol(sym.CONSTCHAR,yytext());
+            { return symbol("constchar", sym.CONSTCHAR,yytext());
             }
           case 85: break;
           case 37: 
-            { return symbol(sym.INT,yytext());
+            { return symbol("int", sym.INT);
             }
           case 86: break;
           case 38: 
-            { return symbol(sym.FOR);
+            { return symbol("for", sym.FOR);
             }
           case 87: break;
           case 39: 
-            { return symbol(sym.NULL, yytext());
+            { return symbol("null", sym.NULL, yytext());
             }
           case 88: break;
           case 40: 
-            { return symbol(sym.ELSE);
+            { return symbol("else", sym.ELSE);
             }
           case 89: break;
           case 41: 
-            { return symbol(sym.VOID);
+            { return symbol("void", sym.VOID);
             }
           case 90: break;
           case 42: 
-            { return symbol(sym.MAIN);
+            { return symbol("main", sym.MAIN);
             }
           case 91: break;
           case 43: 
-            { return symbol(sym.CHAR,yytext());
+            { return symbol("char", sym.CHAR);
             }
           case 92: break;
           case 44: 
-            { return symbol(sym.BREAK);
+            { return symbol("break", sym.BREAK);
             }
           case 93: break;
           case 45: 
-            { return symbol(sym.SCANF);
+            { return symbol("scanf", sym.SCANF);
             }
           case 94: break;
           case 46: 
-            { return symbol(sym.WHILE);
+            { return symbol("while", sym.WHILE);
             }
           case 95: break;
           case 47: 
-            { return symbol(sym.PRINTF);
+            { return symbol("printf", sym.PRINTF);
             }
           case 96: break;
           case 48: 
-            { return symbol(sym.RETURN);
+            { return symbol("return", sym.RETURN);
             }
           case 97: break;
           case 49: 
-            { return symbol(sym.BOOLEAN);
+            { return symbol("boolean", sym.BOOLEAN);
             }
           case 98: break;
           default:

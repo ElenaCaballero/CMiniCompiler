@@ -57,7 +57,7 @@ null = "null"|"NULL"
 %%
 
 <YYINITIAL>{
-    \"			        { string.setLength(0); string.append(yytext()); yybegin(STRING); }    
+    \"			{ string.setLength(0); string.append(yytext()); yybegin(STRING); }    
     "/*"                { commentLine = yyline+1; stComment++; yybegin(COMMENT); }
     "*/"                { System.out.println("Utilizó */ sin abrirlo"); }
     "//"                { yybegin(LINECOMMENT); }
@@ -66,35 +66,35 @@ null = "null"|"NULL"
     "main"              { return symbol("main", sym.MAIN); }
     "printf"            { return symbol("printf", sym.PRINTF); }
     "scanf"             { return symbol("scanf", sym.SCANF); }
-    ";"                 { return symbol("program", sym.SEMICOLON); }
-    ","                 { return symbol("program", sym.COMMA); }
-    "("                 { return symbol("program", sym.LEFTPRNTH); }
-    ")"                 { return symbol("program", sym.RIGHTPRNTH); }
-    "{"                 { return symbol("program", sym.LEFTCBRAC); }
-    "}"                 { return symbol("program", sym.RIGHTCBRAC); }
-    "*"                 { return symbol("program", sym.ASTERISK); }
-    "="                 { return symbol(sym.EQUALS); }
-    "&"                 { return symbol(sym.AMPERSAND); }
-    "%d"                { return symbol(sym.DECIMALINT); }
-    "%c"                { return symbol(sym.SINGLECHAR); }
-    "||"                { return symbol(sym.OR); }
-    "&&"                { return symbol(sym.AND); }
-    "for"               { return symbol(sym.FOR); }
-    "while"             { return symbol(sym.WHILE); }
-    "if"                { return symbol(sym.IF); }
-    "else"              { return symbol(sym.ELSE); }
-    "return"            { return symbol(sym.RETURN); }
-    "break"             { return symbol(sym.BREAK); }
-    "int"               { return symbol(sym.INT,yytext()); }
-    "char"              { return symbol(sym.CHAR,yytext()); }
-    {arthmexpSUM}       { return symbol(sym.ARTHMEXPSUM,yytext()); }
-    {arthmexpMULT}      { return symbol(sym.ARTHMEXPMULT,yytext()); }
-    {boolexp}           { return symbol(sym.BOOLEXP,yytext()); }
-    {null}              { return symbol(sym.NULL, yytext()); }
-    {boolToF}           { return symbol(sym.BOOLTOF, yytext()); }
-    {constchar}         { return symbol(sym.CONSTCHAR,yytext()); }
-    {integer}		    { return symbol(sym.INTEGER, yytext()); }
-    {id}                { return symbol(sym.ID, yytext()); }
+    ";"                 { return symbol(";", sym.SEMICOLON); }
+    ","                 { return symbol(",", sym.COMMA); }
+    "("                 { return symbol("(", sym.LEFTPRNTH); }
+    ")"                 { return symbol(")", sym.RIGHTPRNTH); }
+    "{"                 { return symbol("{", sym.LEFTCBRAC); }
+    "}"                 { return symbol("}", sym.RIGHTCBRAC); }
+    "*"                 { return symbol("*", sym.ASTERISK); }
+    "="                 { return symbol("=", sym.EQUALS); }
+    "&"                 { return symbol("&", sym.AMPERSAND); }
+    "%d"                { return symbol("%d", sym.DECIMALINT); }
+    "%c"                { return symbol("%c", sym.SINGLECHAR); }
+    "||"                { return symbol("||", sym.OR); }
+    "&&"                { return symbol("&&", sym.AND); }
+    "for"               { return symbol("for", sym.FOR); }
+    "while"             { return symbol("while", sym.WHILE); }
+    "if"                { return symbol("if", sym.IF); }
+    "else"              { return symbol("else", sym.ELSE); }
+    "return"            { return symbol("return", sym.RETURN); }
+    "break"             { return symbol("break", sym.BREAK); }
+    "int"               { return symbol("int", sym.INT); }
+    "char"              { return symbol("char", sym.CHAR); }
+    {arthmexpSUM}       { return symbol("arthmExpSUM", sym.ARTHMEXPSUM,yytext()); }
+    {arthmexpMULT}      { return symbol("arthmExpMULT", sym.ARTHMEXPMULT,yytext()); }
+    {boolexp}           { return symbol("boolexp", sym.BOOLEXP,yytext()); }
+    {null}              { return symbol("null", sym.NULL, yytext()); }
+    {boolToF}           { return symbol("boolToF", sym.BOOLTOF, yytext()); }
+    {constchar}         { return symbol("constchar", sym.CONSTCHAR,yytext()); }
+    {integer}		{ return symbol("integer", sym.INTEGER, yytext()); }
+    {id}                { return symbol("id", sym.ID, yytext()); }
     {space}             { }
     .                   { error("Illegal character <"+ yytext()+"> @ Line " + (yyline+1)); }
 }
@@ -112,7 +112,7 @@ null = "null"|"NULL"
 <STRING> {
       \"                             { string.append( yytext() ); 
                                        yybegin(YYINITIAL);
-                                       return symbol(sym.CONSTSTR, string.toString()); }
+                                       return symbol("conststr", sym.CONSTSTR, string.toString()); }
       [^\n\r\"\\]+                   { string.append( yytext() ); }
       \\t                            { string.append('\t'); }
       \\n                            { string.append('\n'); }
