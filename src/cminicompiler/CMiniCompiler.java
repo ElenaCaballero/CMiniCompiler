@@ -5,6 +5,10 @@
  */
 package cminicompiler;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,8 +28,19 @@ public class CMiniCompiler {
         buildParser();
         
         try {
-            parser p = new parser(new CMiniLexer(new FileReader("src/cminicompiler/ejercicio.txt")));
+            parser p = new parser(new CMiniLexer(new FileReader("./test/ejercicio.txt")));
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            mapper.setVisibilityChecker(mapper.getSerializationConfig().getDefaultVisibilityChecker()
+                .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
+                .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
+                .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
+                .withCreatorVisibility(JsonAutoDetect.Visibility.NONE));
+            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            //mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
+            //System.out.println(symtab);
             p.parse(); 
+            mapper.writeValue(new File("./test/AST.json"), p.root);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(CMiniCompiler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {

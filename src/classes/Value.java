@@ -9,17 +9,13 @@ package classes;
  *
  * @author elenacaballero
  */
-class Value {
-    String value;
-    int intValue;
+public class Value {
+    public String type, token;
 
-    public Value(String value) {
-        this.value = value;
+    public Value(String token, String type) {
+        this.token = token;
+        this.type = type;
     }
 
-    public Value(int intValue) {
-        this.intValue = intValue;
-    }
-    
     
 }

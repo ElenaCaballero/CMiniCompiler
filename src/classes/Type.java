@@ -10,10 +10,14 @@ package classes;
  * @author elenacaballero
  */
 public class Type {
-    String tipo;
+    public String tipo, asterisk;
 
     public Type(String tipo) {
         this.tipo = tipo;
     }
 
+    public Type(String tipo, String asterisk) {
+        this.tipo = tipo + asterisk;
+    }
+    
 }

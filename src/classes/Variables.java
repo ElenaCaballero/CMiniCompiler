@@ -9,10 +9,10 @@ package classes;
  *
  * @author elenacaballero
  */
-class Variables {
-    String id;
-    Variables variables;
-    Value value;
+public class Variables {
+    public String id;
+    public Variables variables;
+    public Value value;
 
     public Variables(String id) {
         this.id = id;

@@ -5,13 +5,15 @@
  */
 package classes;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author elenacaballero
  */
-class ArgumentList {
-    ArgumentList argumentList;
-    Argument argument;
+public class ArgumentList {
+    public ArgumentList argumentList;
+    public Argument argument;
 
     public ArgumentList(Argument argument) {
         this.argument = argument;
@@ -21,5 +23,7 @@ class ArgumentList {
         this.argumentList = argumentList;
         this.argument = argument;
     }
+
+    
     
 }

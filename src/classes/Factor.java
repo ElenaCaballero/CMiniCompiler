@@ -9,20 +9,23 @@ package classes;
  *
  * @author elenacaballero
  */
-public class ForArthmExp {
-    public String id, aE, aE1, eq;
-    public int num;
+public class Factor {
+    public ArithmeticExp aE;
+    public int i;
+    public String id;
 
-    public ForArthmExp(String id, String aE, String aE1) {
-        this.id = id;
+    public Factor(ArithmeticExp aE) {
         this.aE = aE;
-        this.aE1 = aE1;
     }
 
-    public ForArthmExp(String id, String aE, String eq, int num) {
+    public Factor(int i) {
+        this.i = i;
+    }
+    
+    //este debe cambiar
+
+    public Factor(String id) {
         this.id = id;
-        this.aE = aE;
-        this.num = num;
     }
     
     

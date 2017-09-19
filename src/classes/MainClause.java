@@ -11,13 +11,13 @@ package classes;
  * @author elenacaballero
  */
 public class MainClause {
-    Type i;
-    String main;
-    ArgumentList argumentlist;
-    Expressions expressions;
+    public Type type;
+    public String main;
+    public ArgumentList argumentlist;
+    public Expressions expressions;
 
-    public MainClause(Type i, String main, ArgumentList argumentlist, Expressions expressions) {
-        this.i = i;
+    public MainClause(Type type, String main, ArgumentList argumentlist, Expressions expressions) {
+        this.type = type;
         this.main = main;
         this.argumentlist = argumentlist;
         this.expressions = expressions;

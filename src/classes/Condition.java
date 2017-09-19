@@ -9,11 +9,11 @@ package classes;
  *
  * @author elenacaballero
  */
-class Condition {
-    Value valLeft;
-    String exp;
-    Value valRight;
-    AndOR aO;
+public class Condition {
+    public Value valLeft;
+    public String exp;
+    public Value valRight;
+    public AndOR aO;
 
     public Condition(Value valLeft, String exp, Value valRight) {
         this.valLeft = valLeft;

@@ -5,19 +5,25 @@
  */
 package classes;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author elenacaballero
  */
 public class CMiniProgram {
-    FunctionDeclaration functionDeclaration;
-    MainClause mainClause;
-    FunctionList functionList;
+    public FunctionDeclaration functionDeclaration;
+    public MainClause mainClause;
+    public FunctionList functionList;
 
     public CMiniProgram(FunctionDeclaration functionDeclaration, MainClause mainClause, FunctionList functionList) {
         this.functionDeclaration = functionDeclaration;
         this.mainClause = mainClause;
         this.functionList = functionList;
+    }
+
+    public CMiniProgram(MainClause mainClause) {
+        this.mainClause = mainClause;
     }
     
     

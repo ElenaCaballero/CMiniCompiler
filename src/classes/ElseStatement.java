@@ -9,12 +9,12 @@ package classes;
  *
  * @author elenacaballero
  */
-class ElseStatement {
-    String eS;
-    Expression e;
-    IfStatement ifS;
+public class ElseStatement {
+    public String eS;
+    public Expressions e;
+    public IfStatement ifS;
 
-    public ElseStatement(String eS, Expression e) {
+    public ElseStatement(String eS, Expressions e) {
         this.eS = eS;
         this.e = e;
     }

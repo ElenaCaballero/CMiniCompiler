@@ -9,19 +9,16 @@ package classes;
  *
  * @author elenacaballero
  */
-class ReturnStatement {
-    String ret;
-    String id;
-    int num;
+public class ReturnStatement {
+    public String ret;
+    public Value val;
 
-    public ReturnStatement(String ret, String id) {
+    public ReturnStatement(String ret, Value val) {
         this.ret = ret;
-        this.id = id;
+        this.val = val;
     }
-
-    public ReturnStatement(String ret, int num) {
-        this.ret = ret;
-        this.num = num;
+    
+    public ReturnStatement() {
     }
     
 }

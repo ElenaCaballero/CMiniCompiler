@@ -9,12 +9,14 @@ package classes;
  *
  * @author elenacaballero
  */
-class Expression {
-    VariableDeclaration variableDeclaration;
-    Statements statements;
-    Scanners scanners;
-    Printers printers;
-    String breakE;
+public class Expression {
+    public VariableDeclaration variableDeclaration;
+    public Statements statements;
+    public Scanners scanners;
+    public Printers printers;
+    public String breakE;
+    public ReturnStatement retState;
+    public ArithmeticExp arithmeticExp;
 
     public Expression(VariableDeclaration variableDeclaration) {
         this.variableDeclaration = variableDeclaration;
@@ -34,6 +36,14 @@ class Expression {
 
     public Expression(String breakE) {
         this.breakE = breakE;
+    }
+
+    public Expression(ReturnStatement retState) {
+        this.retState = retState;
+    }
+
+    public Expression(ArithmeticExp arithmeticExp) {
+        this.arithmeticExp = arithmeticExp;
     }
     
     

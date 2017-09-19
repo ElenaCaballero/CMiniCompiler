@@ -9,9 +9,9 @@ package classes;
  *
  * @author elenacaballero
  */
-class Printers {
-    String type, literal;
-    Variables v;
+public class Printers {
+    public String type, literal;
+    public Variables v;
 
     public Printers(String type, String literal) {
         this.type = type;
@@ -22,6 +22,10 @@ class Printers {
         this.type = type;
         this.literal = literal;
         this.v = v;
+    }
+
+    public Printers() {
+        
     }
     
     

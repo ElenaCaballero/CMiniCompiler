@@ -9,10 +9,10 @@ package classes;
  *
  * @author elenacaballero
  */
-class WhileStatement {
-    String whileS;
-    Condition c;
-    Expressions e;
+public class WhileStatement {
+    public String whileS;
+    public Condition c;
+    public Expressions e;
 
     public WhileStatement(String whileS, Condition c, Expressions e) {
         this.whileS = whileS;

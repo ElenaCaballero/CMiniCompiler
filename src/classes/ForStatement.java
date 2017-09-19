@@ -9,12 +9,12 @@ package classes;
  *
  * @author elenacaballero
  */
-class ForStatement {
-    String forS;
-    Inits init;
-    Condition c;
-    ForArthmExp aE;
-    Expressions e;
+public class ForStatement {
+    public String forS;
+    public Inits init;
+    public Condition c;
+    public ForArthmExp aE;
+    public Expressions e;
 
     public ForStatement(String forS, Inits init, Condition c, ForArthmExp aE, Expressions e) {
         this.forS = forS;

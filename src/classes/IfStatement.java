@@ -9,22 +9,21 @@ package classes;
  *
  * @author elenacaballero
  */
-class IfStatement {
-    String ifS;
-    Condition c;
-    Expression e;
-    ElseStatement eS;
+public class IfStatement {
+    public String ifS;
+    public Condition c;
+    public Expressions e;
+    public ElseStatement eS;
+    public IfStatement i;
 
-    public IfStatement(String ifS, Condition c, Expression e) {
+    public IfStatement(String ifS, Condition c, Expressions e) {
         this.ifS = ifS;
         this.c = c;
         this.e = e;
     }
 
-    public IfStatement(String ifS, Condition c, Expression e, ElseStatement eS) {
-        this.ifS = ifS;
-        this.c = c;
-        this.e = e;
+    public IfStatement(IfStatement i, ElseStatement eS) {
+        this.i = i;
         this.eS = eS;
     }
     

@@ -9,7 +9,7 @@ parser code {:
 	public CMiniProgram root = null;
 
 	public void report_error(String message, Object info) {
-		StringBuilder m = new StringBuilder("Sintax Error");
+		StringBuilder m = new StringBuilder("Syntax Error");
 		if (info instanceof java_cup.runtime.Symbol) {
 			java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
 			if (s.left >= 0) {
@@ -17,6 +17,7 @@ parser code {:
 				if (s.right >= 0)
 					m.append(", column "+(s.right+1));
 			}
+                        System.err.println("Value "+ s.right);
 		}
 		m.append(" : "+message);
 		System.err.println(m);
@@ -24,23 +25,20 @@ parser code {:
 
 	public void report_fatal_error(String message, Object info) {
 		report_error(message, info);
-		System.exit(1);
+		//System.exit(1);
 	}
 
-	public void syntax_error(Symbol cur_token) {
-		report_error("on Token "+ cur_token.value, cur_token);
-	}
+	
 
 :};
 
-terminal INT, CHAR, BOOLEAN, CONSTCHAR, CONSTSTR, 
-    VOID, PRINTF, SCANF, ARTHMEXPSUM, ARTHMEXPMULT, 
-    BOOLEXP, SEMICOLON, COMMA, LEFTPRNTH, 
-    RIGHTPRNTH, LEFTCBRAC, RIGHTCBRAC, LEFTBRAK, RIGHTBRAK, 
-    EQUAL, NUMERAL, OR, AND, FOR, WHILE, IF, ELSE, 
-    RETURN, BREAK, NULL, BOOLTOF, ID, DECIMALINT, SINGLECHAR,
-    LETTER, INTEGER, MAIN;
-terminal String STRING_LITERAL;
+terminal INT, CHAR, BOOLEAN, CONSTCHAR, VOID, PRINTF,
+	SCANF, ARTHMEXPSUM, ARTHMEXPMULT, BOOLEXP, SEMICOLON,
+	COMMA, LEFTPRNTH, RIGHTPRNTH, LEFTCBRAC, RIGHTCBRAC, 
+	EQUALS, OR, AND, FOR, WHILE, IF, ELSE, RETURN, BREAK,
+	NULL, BOOLTOF, ID, DECIMALINT, SINGLECHAR, INTEGER, 
+	MAIN, AMPERSAND, ASTERISK;
+terminal String CONSTSTR;
 
 non terminal CMiniProgram cMiniProgram;
 non terminal MainClause mainClause;
@@ -66,30 +64,46 @@ non terminal WhileStatement whileStatement;
 non terminal ForStatement forStatement;
 non terminal Inits inits;
 non terminal ForArthmExp forArthmExp;
-non terminal AndOr andOr;
+non terminal AndOR andOr;
 non terminal ArithmeticExp arithmeticExp; 
+non terminal Term term;
+non terminal Factor factor;
+non terminal String opsum;
+non terminal String opmult;
+non terminal String operators;
+
+
+precedence left OR;
+precedence nonassoc BOOLEXP;
+precedence left ARTHMEXPSUM;
+precedence left ARTHMEXPMULT;
+precedence left LEFTPRNTH, RIGHTPRNTH, LEFTCBRAC, RIGHTCBRAC;
+precedence right ELSE;
+precedence left ID;
 
 start with cMiniProgram;
 
-cMiniProgram ::= functionDeclaration:fd mainClause:mc functionList:fl {:
+cMiniProgram ::= mainClause:mc {:
+					CMiniProgram r = new CMiniProgram(mc);
+					RESULT = r;
+					parser.root = RESULT;
+				:}
+				| functionDeclaration:fd mainClause:mc functionList:fl {:
 					CMiniProgram r = new CMiniProgram(fd, mc, fl);
 					RESULT = r;
 					parser.root = RESULT;
 				:}
 				;
 
-mainClause ::= type:i MAIN:m LEFTPRNTH argumentList:a RIGHTPRNTH LEFTCBRAC expressions:e RIGHTCBRAC {:
-					MainClause r = new MainClause(i, (String)m, a, e);
+mainClause ::= type:t MAIN:m LEFTPRNTH argumentList:a RIGHTPRNTH LEFTCBRAC expressions:e RIGHTCBRAC {:
+					MainClause r = new MainClause(t, (String)m, a, e);
 					RESULT = r;
 				:}
 				;
 
-functionDeclaration ::= type:t ID:id LEFTPRNTH argumentList:a RIGHTPRNTH {:
+functionDeclaration ::= type:t ID:id LEFTPRNTH argumentList:a RIGHTPRNTH SEMICOLON {:
 					FunctionDeclaration r = new FunctionDeclaration(t, (String)id, a);
 					RESULT = r;
-				:}
-				|{:
-					RESULT = null;
 				:}
 				;
 
@@ -101,9 +115,6 @@ functionList ::= function:f functionList:fl {:
 					FunctionList r = new FunctionList(f);
 					RESULT = r; 
 				:}
-				|{:
-					RESULT = null;
-				:}
 				;
 
 function ::= type:t ID:id LEFTPRNTH argumentList:a RIGHTPRNTH LEFTCBRAC expressions:e RIGHTCBRAC {:
@@ -113,14 +124,14 @@ function ::= type:t ID:id LEFTPRNTH argumentList:a RIGHTPRNTH LEFTCBRAC expressi
 				;
 
 argumentList ::= argument:a COMMA argumentList:al {:
-					ArgumentList r = new ArgumentList(a, al);
+					ArgumentList r = new ArgumentList(al, a);
 					RESULT = r;
 				:}
 				| argument:a {:
 					ArgumentList r = new ArgumentList(a);
 					RESULT = r;
 				:}
-				|{:
+				|  {:
 					RESULT = null;
 				:}
 				;
@@ -131,20 +142,13 @@ argument ::= type:t ID:id  {:
 				:}
 				;
 
-expressions ::= expressions:es SEMICOLON expression:e SEMICOLON returnStatement:rs SEMICOLON {:
-					Expressions r = new Expressions(es, e, rs);
+expressions ::= expression:e expressions:es {:
+					Expressions r = new Expressions(es, e);
 					RESULT = r;
 				:}
-				| expression:e SEMICOLON returnStatement:rs SEMICOLON {:
-					Expressions r = new Expressions(e, rs);
+				| expression:e {:
+					Expressions r = new Expressions(e);
 					RESULT = r;
-				:}
-				| returnStatement:rs SEMICOLON {:
-					Expressions r = new Expressions(rs);
-					RESULT = r;
-				:}
-				|{:
-					RESULT = null;
 				:}
 				;
 
@@ -164,26 +168,22 @@ expression ::= variableDeclaration:vd {:
 					Expression r = new Expression(p);
 					RESULT = r;
 				:}
+				| arithmeticExp:a {:
+					Expression r = new Expression(a);
+					RESULT = r;
+				:}
+				| returnStatement:rs {:
+					Expression r = new Expression(rs);
+					RESULT = r;
+				:}
 				| BREAK:b {:
-					Expression r = new Expression(b);
+					Expression r = new Expression((String)b);
 					RESULT = r;
 				:}
 				;
 
-returnStatement ::= RETURN:ret ID:id {:
-						ReturnStatement r = new ReturnStatement(ret, (String)id);
-						RESULT = r;
-					:}
-					| RETURN:ret NUMERAL:num {:
-						ReturnStatement r = new ReturnStatement(ret, num); 
-						RESULT = r;
-					:}
-					| RETURN:ret NULL:n {:
-						ReturnStatement r = new ReturnStatement(ret, (String)n); 
-						RESULT = r;
-					:}
-					| {:
-						RESULT = null;
+returnStatement ::= RETURN:ret value:val SEMICOLON{:
+						ReturnStatement r = new ReturnStatement((String)ret, val);
 					:}
 					;
 
@@ -194,19 +194,19 @@ variableDeclaration ::= type:t variables:v SEMICOLON {:
 						;
 
 variables ::= ID:id {:
-					Variables r = new Variables(id);
+					Variables r = new Variables((String)id);
 					RESULT = r;
 				:}
 			  	| ID:id COMMA variables:v {:
-		  			Variables r = new Variables(id, v);
+		  			Variables r = new Variables((String)id, v);
 		  			RESULT = r;
 		  		:}
-			  	| ID:id EQUAL value:val {:
-		  			Variables r = new Variables(id, val);
+			  	| ID:id EQUALS value:val {:
+		  			Variables r = new Variables((String)id, val);
 		  			RESULT = r;
 		  		:}
-			  	| ID:id EQUAL value:val COMMA variables:v {:
-			  		Variables r = new Variables(id, val, v);
+			  	| ID:id EQUALS value:val COMMA variables:v {:
+			  		Variables r = new Variables((String)id, val, v);
 			  		RESULT = r;
 		  		:}
 			  	;
@@ -225,96 +225,60 @@ statements ::= ifStatement:ifs 	{:
 				:}
 				;
 
-ifStatement ::= IF:i LEFTPRNTH condition:c RIGHTPRNTH LEFTCBRAC expressions:e RIGHTCBRAC elseStatement:eS {:
-					IfStatement r = new IfStatement((String)i,c,e,eS);
+ifStatement ::= IF:i LEFTPRNTH condition:c RIGHTPRNTH LEFTCBRAC expressions:e RIGHTCBRAC{:
+					IfStatement r = new IfStatement((String)i, c, e);
 					RESULT = r;
 				:}
-				| IF:i LEFTPRNTH condition:c RIGHTPRNTH LEFTCBRAC expressions:e RIGHTCBRAC{:
-					IfStatement r = new IfStatement((String)i,c,e);
+				|ifStatement:i elseStatement:eS {:
+					IfStatement r = new IfStatement(i, eS);
 					RESULT = r;
-				:}
+				:} 
 				;
 
 elseStatement ::= ELSE:eS LEFTCBRAC expressions:e RIGHTCBRAC {: 
-					ElseStatement r = new ElseStatement(eS,e);
+					ElseStatement r = new ElseStatement((String)eS, e);
 					RESULT = r;
 				:}
 				| ELSE:e ifStatement:ifS {:
-					IfStatement r = new IfStatement(e,ifS);
+					ElseStatement r = new ElseStatement((String)e, ifS);
 					RESULT = r;
 				:}
 				;
 
-condition ::= value:v1 BOOLEXP:b value:v2 {:
-				Condition r = new Condition(v1,b,v2);
+condition ::= value:v1 operators:b value:v2 {:
+				Condition r = new Condition(v1,(String)b,v2);
 				RESULT = r;
 			:}
-			| value:v1 BOOLEXP:b value:v2 andOr:aO {:
-				Condition r = new Condition(v1,b,v2,aO);
+			| value:v1 operators:b value:v2 andOr:aO {:
+				Condition r = new Condition(v1,(String)b,v2,aO);
 				RESULT = r;
+			:}
+			;
+
+operators ::= BOOLEXP:b {:
+				if (b == "<") {
+					RESULT = "<";
+				}else if (b == ">") {
+					RESULT = ">";
+				}else if (b == "<=") {
+					RESULT = "<=";
+				}else if (b == ">=") {
+					RESULT = ">=";
+				}else if (b == "!=") {
+					RESULT = "!=";
+				}else if (b == "==") {
+					RESULT = "==";
+				}else{
+					System.err.println("Error");
+				}
 			:}
 			;
 
 andOr ::= AND:a condition:c {:
-			RESULT = new AndOR(a,c);
+			RESULT = new AndOR((String)a,c);
 		:}
 		| OR:o condition:c {:
-			RESULT = new AndOR(o,c);
-		:}
-		;
-
-scanners ::= SCANF:sf LEFTPRNTH STRING_LITERAL:sl COMMA variables:v RIGHTPRNTH SEMICOLON {:
-				Scanners r= new Scanners(sf,sl,v);
-				RESULT = r;
-			:}
-			;
-
-printers ::= PRINTF:pf LEFTPRNTH STRING_LITERAL:sl RIGHTPRNTH SEMICOLON {:
-				Printers r = new Printers(pf,sl);
-				RESULT = r;
-			:}
-			|PRINTF:pf LEFTPRNTH STRING_LITERAL:sl COMMA variables:v RIGHTPRNTH SEMICOLON{:
-				Printers r= new Printers(pf,sl,v);
-				RESULT = r;
-			:}
-			;
-
-value ::= ID:id {:
-				RESULT = new Value(id);
-			:}
-			|NUMERAL:num {:
-				RESULT = new Value(num);
-			:}
-			|STRING_LITERAL:sl {:
-				RESULT = new Value(sl);
-			:}
-			|BOOLTOF:tF {:
-				RESULT = new Value(tF);
-			:}
-			|NULL:n {:
-				RESULT = new Value(n);
-			:}
-			;
-
-type ::= INT:i {:
-			Type r = new Type(i);
-			RESULT = r;
-		:}
-		| CHAR:c {:
-			Type r = new Type(c);
-			RESULT = r;
-		:}
-		| BOOLEAN:b {:
-			Type r = new Type(b);
-			RESULT = r;
-		:}
-		| CONSTSTR:cS {:
-			Type r = new Type(cS);
-			RESULT = r;
-		:}
-		| VOID:v {:
-			Type r = new Type(v);
-			RESULT = r;
+			RESULT = new AndOR((String)o,c);
 		:}
 		;
 
@@ -330,30 +294,156 @@ forStatement ::= FOR:f LEFTPRNTH inits:i SEMICOLON condition:c SEMICOLON forArth
 				:}
 				;
 
-inits ::= INT:i ID:id EQUAL value:v {:
-			Inits r = new Inits((String)i, (String)id,v); //ACORDARSE QUE EL INT NO ES INT*
+inits ::= INT:i ID:id EQUALS value:v {:
+			Inits r = new Inits((String)i, (String)id,v);
 			RESULT = r;
 		:}
 		;
 
 forArthmExp ::= ID:id ARTHMEXPSUM:aES1 ARTHMEXPSUM:aES2 {:
-				if(aES1 == aES2){
-					ForArthmExp r = new ForArthmExp((String)id, (String)aES1, (String)aES2);
-					RESULT = r;
-				}else{
-					System.err.println("error"));;// REVISAR COMO TIRAR ERRORES SIN QUE QUIEBRE
+				ForArthmExp r = new ForArthmExp((String)id, (String)aES1, (String)aES2);
+				if(aES1 != aES2){
+					System.err.println("error");// REVISAR COMO TIRAR ERRORES SIN QUE QUIEBRE
 				}
+				RESULT = r;
 			:}
-			| ID:id ARTHMEXPSUM:aES NUMERAL:num {:
-				ForArthmExp r = new ForArthmExp((String)id, (String)aES, num);
+			| ID:id ARTHMEXPSUM:aES EQUALS:eq INTEGER:num {:
+				ForArthmExp r = new ForArthmExp((String)id, (String)aES, (String)eq, (int)num);
 			:}
-			| ID:id ARTHMEXPMULT:aES NUMERAL:num {:
-				ForArthmExp r = new ForArthmExp((String)id, (String)aES, num);
+			| ID:id ARTHMEXPMULT:aES EQUALS:eq INTEGER:num {:
+				ForArthmExp r = new ForArthmExp((String)id, (String)aES, (String)eq, (int)num);
 			:}
 			;
 
-arithmeticExp ::= ARTHMEXPSUM 
-					|ARTHMEXPMULT
+scanners ::= SCANF:sf LEFTPRNTH CONSTSTR:sl COMMA variables:v RIGHTPRNTH SEMICOLON {:
+				Scanners r= new Scanners((String)sf,sl,v);
+				RESULT = r;
+			:}
+			;
+
+printers ::= PRINTF:pf LEFTPRNTH CONSTSTR:sl RIGHTPRNTH SEMICOLON {:
+				Printers r = new Printers((String)pf,sl);
+				RESULT = r;
+			:}
+			|PRINTF:pf LEFTPRNTH CONSTSTR:sl COMMA variables:v RIGHTPRNTH SEMICOLON{:
+				Printers r= new Printers((String)pf,sl,v);
+				RESULT = r;
+			:}
+			| error SEMICOLON {:
+				RESULT = new Printers();
+				System.err.println("Error at declaration line: Possible missing ; at the end of a declaration line.");
+			:}
+			;
+
+value ::= ID:id {:
+				RESULT = new Value((String)id, "id");
+			:}
+			|INTEGER:num {:
+				RESULT = new Value((String)num, "int");
+			:}
+			|CONSTCHAR:character {:
+				RESULT = new Value((String)character, "char");
+			:}
+			|BOOLTOF:tF {:
+				RESULT = new Value((String)tF, "bool");
+			:}
+			|NULL:n {:
+				RESULT = new Value((String)n, "null");
+			:}
+			;
+
+type ::= INT:i {:
+			Type r = new Type((String)i);
+			RESULT = r;
+		:}
+		| CHAR:c {:
+			Type r = new Type((String)c);
+			RESULT = r;
+		:}
+		| INT:i ASTERISK:a {:
+			Type r = new Type((String)i, (String)a);
+			RESULT = r;
+		:}
+		| CHAR:c ASTERISK:a {:
+			Type r = new Type((String)c, (String)a);
+			RESULT = r;
+		:}
+		| BOOLEAN:b {:
+			Type r = new Type((String)b);
+			RESULT = r;
+		:}
+		| VOID:v {:
+			Type r = new Type((String)v);
+			RESULT = r;
+		:}
+		;
+
+
+arithmeticExp ::= arithmeticExp:e opsum:opsum term:t {:
+						if (opsum == "+") {
+							ArithmeticExp r = new ArithmeticExp(e, "+", t);
+							RESULT = r;
+						}else if (opsum == "-") {
+							ArithmeticExp r = new ArithmeticExp(e, "-", t);
+							RESULT = r;
+						}
+					:}
+					|term:t {:
+						ArithmeticExp r = new ArithmeticExp(t);
+						RESULT = r;
+					:}
 					;
+
+term ::= term:t opmult:opmult factor:f {:
+				if (opmult == "*") {
+					Term r = new Term(t, "*", f);
+					RESULT = r;
+				}else if (opmult == "/") {
+					Term r = new Term(t, "/", f);
+					RESULT = r;
+				}
+			:}
+			|factor:f {:
+				Term r = new Term(f);
+				RESULT = r;
+			:}
+			;
+
+factor ::= LEFTPRNTH arithmeticExp:e RIGHTPRNTH {:
+				Factor r = new Factor(e);
+				RESULT = r;
+			:}
+			|INTEGER:num {:
+				Factor r = new Factor((int)num);
+				RESULT = r;
+			:}
+			|ID:id {:
+				//conseguir el valor del id, validar que es un int
+				Factor r = new Factor((String)id);
+				RESULT = r;
+			:}
+			;
+
+opsum ::= ARTHMEXPSUM:op {:
+				if (op == "+") {
+					RESULT = "+";
+				}else if (op == "-") {
+					RESULT = "-";
+				}
+			:}
+			;
+
+opmult ::= ARTHMEXPMULT:op {:
+				if (op == "*") {
+					RESULT = "*";
+				}else if (op == "/") {
+					RESULT = "/";
+				}
+			:}
+			;
+
+
+
+
 
 

@@ -9,11 +9,11 @@ package classes;
  *
  * @author elenacaballero
  */
-class Function {
-    Type i;
-    String id;
-    ArgumentList argumentlist;
-    Expressions expressions;
+public class Function {
+    public Type i;
+    public String id;
+    public ArgumentList argumentlist;
+    public Expressions expressions;
 
     public Function(Type i, String id, ArgumentList argumentlist, Expressions expressions) {
         this.i = i;

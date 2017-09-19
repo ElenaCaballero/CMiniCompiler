@@ -5,22 +5,24 @@
  */
 package classes;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author elenacaballero
  */
 public class FunctionList {
-    FunctionList functionlist;
-    Function function;
+    public Function function;
+    public FunctionList funcList;
 
-    public FunctionList(FunctionList functionlist, Function function) {
-        this.functionlist = functionlist;
+    public FunctionList(FunctionList funcList, Function function) {
         this.function = function;
+        this.funcList = funcList;
     }
 
     public FunctionList(Function function) {
         this.function = function;
     }
-    
+
     
 }

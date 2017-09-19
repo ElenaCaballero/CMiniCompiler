@@ -5,28 +5,23 @@
  */
 package classes;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author elenacaballero
  */
-class Expressions {
-    Expressions expressions;
-    Expression expression;
-    ReturnStatement returnStatement;
+public class Expressions {
+    public Expressions expressions;
+    public Expression expression;
 
-    public Expressions(Expressions expressions, Expression expression, ReturnStatement returnStatement) {
+    public Expressions(Expressions expressions, Expression expression) {
         this.expressions = expressions;
         this.expression = expression;
-        this.returnStatement = returnStatement;
     }
 
-    public Expressions(Expression expression, ReturnStatement returnStatement) {
+    public Expressions(Expression expression) {
         this.expression = expression;
-        this.returnStatement = returnStatement;
-    }
-
-    public Expressions(ReturnStatement returnStatement) {
-        this.returnStatement = returnStatement;
     }
 
 }

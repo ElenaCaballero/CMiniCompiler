@@ -10,8 +10,8 @@ package classes;
  * @author elenacaballero
  */
 public class Argument {
-    Type type;
-    String id;
+    public Type type;
+    public String id;
 
     public Argument(Type type, String id) {
         this.type = type;

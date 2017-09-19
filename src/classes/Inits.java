@@ -9,9 +9,9 @@ package classes;
  *
  * @author elenacaballero
  */
-class Inits {
-    String type, id;
-    Value val;
+public class Inits {
+    public String type, id;
+    public Value val;
 
     public Inits(String type, String id, Value val) {
         this.type = type;

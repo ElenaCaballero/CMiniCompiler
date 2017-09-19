@@ -9,10 +9,10 @@ package classes;
  *
  * @author elenacaballero
  */
-class Statements {
-    IfStatement ifStatement;
-    WhileStatement whileStatement;
-    ForStatement forStatement;
+public class Statements {
+    public IfStatement ifStatement;
+    public WhileStatement whileStatement;
+    public ForStatement forStatement;
 
     public Statements(IfStatement ifStatement) {
         this.ifStatement = ifStatement;

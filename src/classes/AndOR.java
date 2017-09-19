@@ -9,9 +9,9 @@ package classes;
  *
  * @author elenacaballero
  */
-class AndOR {
-    String s;
-    Condition c;
+public class AndOR {
+    public String s;
+    public Condition c;
 
     public AndOR(String s, Condition c) {
         this.s = s;
