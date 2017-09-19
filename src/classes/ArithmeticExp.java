@@ -23,6 +23,10 @@ public class ArithmeticExp {
     public ArithmeticExp(Term term) {
         this.term = term;
     }
+
+    public ArithmeticExp(ArithmeticExp aE) {
+        this.aE = aE;
+    }
     
     
 }

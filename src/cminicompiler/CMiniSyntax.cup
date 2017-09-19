@@ -17,7 +17,6 @@ parser code {:
 				if (s.right >= 0)
 					m.append(", column "+(s.right+1));
 			}
-                        System.err.println("Value "+ s.right);
 		}
 		m.append(" : "+message);
 		System.err.println(m);
@@ -28,7 +27,9 @@ parser code {:
 		//System.exit(1);
 	}
 
-	
+	public void syntax_error(Symbol cur_token) {
+		report_error("on Token "+ cur_token.value, cur_token);
+	}
 
 :};
 
@@ -66,12 +67,14 @@ non terminal Inits inits;
 non terminal ForArthmExp forArthmExp;
 non terminal AndOR andOr;
 non terminal ArithmeticExp arithmeticExp; 
+non terminal ArithmeticExp artExp; 
 non terminal Term term;
 non terminal Factor factor;
+non terminal Assignment assignment;
+non terminal Assignment assignmentProc;
 non terminal String opsum;
 non terminal String opmult;
 non terminal String operators;
-
 
 precedence left OR;
 precedence nonassoc BOOLEXP;
@@ -168,12 +171,16 @@ expression ::= variableDeclaration:vd {:
 					Expression r = new Expression(p);
 					RESULT = r;
 				:}
-				| arithmeticExp:a {:
+				| artExp:a  {:
 					Expression r = new Expression(a);
 					RESULT = r;
 				:}
 				| returnStatement:rs {:
 					Expression r = new Expression(rs);
+					RESULT = r;
+				:}
+				| assignmentProc:a {:
+					Expression r = new Expression(a);
 					RESULT = r;
 				:}
 				| BREAK:b {:
@@ -269,7 +276,7 @@ operators ::= BOOLEXP:b {:
 				}else if (b == "==") {
 					RESULT = "==";
 				}else{
-					System.err.println("Error");
+					
 				}
 			:}
 			;
@@ -303,7 +310,7 @@ inits ::= INT:i ID:id EQUALS value:v {:
 forArthmExp ::= ID:id ARTHMEXPSUM:aES1 ARTHMEXPSUM:aES2 {:
 				ForArthmExp r = new ForArthmExp((String)id, (String)aES1, (String)aES2);
 				if(aES1 != aES2){
-					System.err.println("error");// REVISAR COMO TIRAR ERRORES SIN QUE QUIEBRE
+					
 				}
 				RESULT = r;
 			:}
@@ -330,8 +337,7 @@ printers ::= PRINTF:pf LEFTPRNTH CONSTSTR:sl RIGHTPRNTH SEMICOLON {:
 				RESULT = r;
 			:}
 			| error SEMICOLON {:
-				RESULT = new Printers();
-				System.err.println("Error at declaration line: Possible missing ; at the end of a declaration line.");
+				System.err.println("Error printing: Possible missing token at the end of a declaration line.");
 			:}
 			;
 
@@ -378,6 +384,11 @@ type ::= INT:i {:
 		:}
 		;
 
+artExp ::= arithmeticExp:ae SEMICOLON {:
+			ArithmeticExp r = new ArithmeticExp(ae);
+			RESULT = r;
+		:}
+		;
 
 arithmeticExp ::= arithmeticExp:e opsum:opsum term:t {:
 						if (opsum == "+") {
@@ -403,7 +414,7 @@ term ::= term:t opmult:opmult factor:f {:
 					RESULT = r;
 				}
 			:}
-			|factor:f {:
+			| factor:f {:
 				Term r = new Term(f);
 				RESULT = r;
 			:}
@@ -413,13 +424,8 @@ factor ::= LEFTPRNTH arithmeticExp:e RIGHTPRNTH {:
 				Factor r = new Factor(e);
 				RESULT = r;
 			:}
-			|INTEGER:num {:
-				Factor r = new Factor((int)num);
-				RESULT = r;
-			:}
-			|ID:id {:
-				//conseguir el valor del id, validar que es un int
-				Factor r = new Factor((String)id);
+			|value:val {:
+				Factor r = new Factor(val);
 				RESULT = r;
 			:}
 			;
@@ -442,7 +448,17 @@ opmult ::= ARTHMEXPMULT:op {:
 			:}
 			;
 
+assignmentProc ::= assignment:a SEMICOLON {:
+					Assignment r = new Assignment(a);
+					RESULT = r;
+				:}
+				;
 
+assignment ::= ID:id EQUALS arithmeticExp:aE {:
+					Assignment r = new Assignment((String)id, aE);
+					RESULT = r;
+				:}
+				;
 
 
 

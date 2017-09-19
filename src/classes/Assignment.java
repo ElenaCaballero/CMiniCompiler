@@ -10,21 +10,18 @@ package classes;
  * @author elenacaballero
  */
 public class Assignment {
-    public String id, type;
-    public int value;
-    public char charval;
+    public String id;
+    public ArithmeticExp aE;
+    public Assignment ass;
 
-    public Assignment(String id, String type, int value) {
+    public Assignment(String id, ArithmeticExp aE) {
         this.id = id;
-        this.type = type;
-        this.value = value;
+        this.aE = aE;
     }
 
-    public Assignment(String id, String type, char charval) {
-        this.id = id;
-        this.type = type;
-        this.charval = charval;
+    public Assignment(Assignment ass) {
+        this.ass = ass;
     }
-    
+
     
 }

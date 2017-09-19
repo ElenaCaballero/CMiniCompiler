@@ -3,6 +3,7 @@ package cminicompiler;
 import java_cup.runtime.*;
 import java_cup.*;
 import java.io.IOException;;
+import java_cup.runtime.Symbol;
 
 %% 
 %class CMiniLexer
@@ -20,7 +21,7 @@ import java.io.IOException;;
     StringBuffer string = new StringBuffer();
 
     private Symbol symbol(String name, int sym) {
-            return new Symbol(sym, yyline, yycolumn);
+            return new Symbol(sym, yyline, yycolumn, name);
     }
 
     private Symbol symbol(String name, int sym, Object val) {
@@ -69,7 +70,7 @@ null = "null"|"NULL"
     ";"                 { return symbol(";", sym.SEMICOLON); }
     ","                 { return symbol(",", sym.COMMA); }
     "("                 { return symbol("(", sym.LEFTPRNTH); }
-    ")"                 { return symbol(")", sym.RIGHTPRNTH); }
+    ")"                 { return symbol(")", sym.RIGHTPRNTH, "hola"); }
     "{"                 { return symbol("{", sym.LEFTCBRAC); }
     "}"                 { return symbol("}", sym.RIGHTCBRAC); }
     "*"                 { return symbol("*", sym.ASTERISK); }

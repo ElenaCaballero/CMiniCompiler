@@ -5,6 +5,7 @@ package cminicompiler;
 import java_cup.runtime.*;
 import java_cup.*;
 import java.io.IOException;;
+import java_cup.runtime.Symbol;
 
 
 /**
@@ -396,7 +397,7 @@ class CMiniLexer implements java_cup.runtime.Scanner {
     StringBuffer string = new StringBuffer();
 
     private Symbol symbol(String name, int sym) {
-            return new Symbol(sym, yyline, yycolumn);
+            return new Symbol(sym, yyline, yycolumn, name);
     }
 
     private Symbol symbol(String name, int sym, Object val) {
@@ -850,7 +851,7 @@ class CMiniLexer implements java_cup.runtime.Scanner {
             }
           case 63: break;
           case 15: 
-            { return symbol(")", sym.RIGHTPRNTH);
+            { return symbol(")", sym.RIGHTPRNTH, "hola");
             }
           case 64: break;
           case 16: 
