@@ -10,11 +10,11 @@ package classes;
  * @author elenacaballero
  */
 public class FunctionDeclaration {
-    public Type type;
+    public Types type;
     public String id;
     public ArgumentList argumentlist;
 
-    public FunctionDeclaration(Type type, String id, ArgumentList argumentlist) {
+    public FunctionDeclaration(Types type, String id, ArgumentList argumentlist) {
         this.type = type;
         this.id = id;
         this.argumentlist = argumentlist;

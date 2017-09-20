@@ -10,10 +10,10 @@ package classes;
  * @author elenacaballero
  */
 public class Argument {
-    public Type type;
+    public Types type;
     public String id;
 
-    public Argument(Type type, String id) {
+    public Argument(Types type, String id) {
         this.type = type;
         this.id = id;
     }

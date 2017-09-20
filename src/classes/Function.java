@@ -10,12 +10,12 @@ package classes;
  * @author elenacaballero
  */
 public class Function {
-    public Type i;
+    public Types i;
     public String id;
     public ArgumentList argumentlist;
     public Expressions expressions;
 
-    public Function(Type i, String id, ArgumentList argumentlist, Expressions expressions) {
+    public Function(Types i, String id, ArgumentList argumentlist, Expressions expressions) {
         this.i = i;
         this.id = id;
         this.argumentlist = argumentlist;

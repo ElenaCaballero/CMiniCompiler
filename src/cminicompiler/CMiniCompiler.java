@@ -37,8 +37,6 @@ public class CMiniCompiler {
                 .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
                 .withCreatorVisibility(JsonAutoDetect.Visibility.NONE));
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            //mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
-            //System.out.println(symtab);
             p.parse(); 
             mapper.writeValue(new File("./test/AST.json"), p.root);
         } catch (FileNotFoundException ex) {

@@ -10,10 +10,10 @@ package classes;
  * @author elenacaballero
  */
 public class VariableDeclaration {
-    public Type type; 
+    public Types type; 
     public Variables variables;
 
-    public VariableDeclaration(Type type, Variables variables) {
+    public VariableDeclaration(Types type, Variables variables) {
         this.type = type;
         this.variables = variables;
     }

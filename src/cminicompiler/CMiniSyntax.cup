@@ -1,15 +1,18 @@
 package cminicompiler;
 
 import java_cup.runtime.*;
-import java.io.Reader;
 import classes.*;
+import java.util.ArrayList;
+import java.lang.reflect.*;
 
 parser code {:
+public CMiniProgram root = null;
 
-	public CMiniProgram root = null;
+    ArrayList<String> errores = new ArrayList();
 
-	public void report_error(String message, Object info) {
-		StringBuilder m = new StringBuilder("Syntax Error");
+    @Override
+    public void report_error(String message, Object info) {
+    	StringBuilder m = new StringBuilder("Syntax Error");
 		if (info instanceof java_cup.runtime.Symbol) {
 			java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
 			if (s.left >= 0) {
@@ -17,19 +20,39 @@ parser code {:
 				if (s.right >= 0)
 					m.append(", column "+(s.right+1));
 			}
+			if (s.sym == 0) {
+				m.append(" : Part of declaration is missing");
+			}else{
+				m.append(" Unexpected token: "+ getToken(s.sym));
+			}
 		}
-		m.append(" : "+message);
 		System.err.println(m);
-	}
+       
+    }
 
-	public void report_fatal_error(String message, Object info) {
-		report_error(message, info);
-		//System.exit(1);
-	}
+    private String getToken(int id) {
+        try {
+	        Field [] field = sym.class.getFields();
+	        for (int i = 0; i < field.length; i++) {
+	          	if (field[i].getInt(null) == id) {
+	                return field[i].getName();
+	            }
+	            
+	        }
+        } catch (Exception e) {          
+        }
+        return "UNKOWN";
+    }
+    
 
-	public void syntax_error(Symbol cur_token) {
-		report_error("on Token "+ cur_token.value, cur_token);
+    public void report_fatal_error(String message, Object info) {
+		//report_error(" Could not recover", info);
 	}
+    
+    @Override
+    public int error_sync_size(){
+        return 1;
+    }
 
 :};
 
@@ -50,7 +73,7 @@ non terminal Argument argument;
 non terminal ArgumentList argumentList;
 non terminal Expression expression;
 non terminal Expressions expressions;
-non terminal Type type;
+non terminal Types type;
 non terminal ReturnStatement returnStatement;
 non terminal VariableDeclaration variableDeclaration;
 non terminal Statements statements;
@@ -96,6 +119,7 @@ cMiniProgram ::= mainClause:mc {:
 					RESULT = r;
 					parser.root = RESULT;
 				:}
+				|error cMiniProgram 
 				;
 
 mainClause ::= type:t MAIN:m LEFTPRNTH argumentList:a RIGHTPRNTH LEFTCBRAC expressions:e RIGHTCBRAC {:
@@ -108,6 +132,9 @@ functionDeclaration ::= type:t ID:id LEFTPRNTH argumentList:a RIGHTPRNTH SEMICOL
 					FunctionDeclaration r = new FunctionDeclaration(t, (String)id, a);
 					RESULT = r;
 				:}
+				|error ID LEFTPRNTH argumentList RIGHTPRNTH SEMICOLON {:
+					System.err.println("Missing type");
+				:} 
 				;
 
 functionList ::= function:f functionList:fl {:
@@ -123,6 +150,12 @@ functionList ::= function:f functionList:fl {:
 function ::= type:t ID:id LEFTPRNTH argumentList:a RIGHTPRNTH LEFTCBRAC expressions:e RIGHTCBRAC {:
 					Function r = new Function(t, (String)id, a, e);
 					RESULT = r;
+				:}
+				|error LEFTPRNTH argumentList RIGHTPRNTH LEFTCBRAC expressions RIGHTCBRAC {:
+					System.err.println("Missing token '('");
+				:}
+				|error RIGHTPRNTH LEFTCBRAC expressions RIGHTCBRAC {:
+					System.err.println("Missing token ')'");
 				:}
 				;
 
@@ -197,6 +230,9 @@ returnStatement ::= RETURN:ret value:val SEMICOLON{:
 variableDeclaration ::= type:t variables:v SEMICOLON {:
 							VariableDeclaration r = new VariableDeclaration(t, v);
 							RESULT = r;
+						:}
+						| error variables SEMICOLON {:
+							System.err.println("Missing token ';' expected");
 						:}
 						;
 
@@ -303,6 +339,7 @@ forStatement ::= FOR:f LEFTPRNTH inits:i SEMICOLON condition:c SEMICOLON forArth
 					ForStatement r = new ForStatement((String)f, i, c, aE, e);
 					RESULT = r;
 				:}
+				|error forStatement
 				;
 
 inits ::= INT:i ID:id EQUALS value:v {:
@@ -332,16 +369,13 @@ scanners ::= SCANF:sf LEFTPRNTH CONSTSTR:sl COMMA variables:v RIGHTPRNTH SEMICOL
 			:}
 			;
 
-printers ::= PRINTF:pf LEFTPRNTH CONSTSTR:sl RIGHTPRNTH SEMICOLON {:
+printers ::= PRINTF:pf LEFTPRNTH CONSTSTR:sl RIGHTPRNTH SEMICOLON:s {:
 				Printers r = new Printers((String)pf,sl);
 				RESULT = r;
 			:}
 			|PRINTF:pf LEFTPRNTH CONSTSTR:sl COMMA variables:v RIGHTPRNTH SEMICOLON{:
 				Printers r= new Printers((String)pf,sl,v);
 				RESULT = r;
-			:}
-			| error SEMICOLON {:
-				System.err.println("Error printing: Possible missing token at the end of a declaration line.");
 			:}
 			;
 
@@ -363,27 +397,27 @@ value ::= ID:id {:
 			;
 
 type ::= INT:i {:
-			Type r = new Type((String)i);
+			Types r = new Types((String)i);
 			RESULT = r;
 		:}
 		| CHAR:c {:
-			Type r = new Type((String)c);
+			Types r = new Types((String)c);
 			RESULT = r;
 		:}
 		| INT:i ASTERISK:a {:
-			Type r = new Type((String)i, (String)a);
+			Types r = new Types((String)i, (String)a);
 			RESULT = r;
 		:}
 		| CHAR:c ASTERISK:a {:
-			Type r = new Type((String)c, (String)a);
+			Types r = new Types((String)c, (String)a);
 			RESULT = r;
 		:}
 		| BOOLEAN:b {:
-			Type r = new Type((String)b);
+			Types r = new Types((String)b);
 			RESULT = r;
 		:}
 		| VOID:v {:
-			Type r = new Type((String)v);
+			Types r = new Types((String)v);
 			RESULT = r;
 		:}
 		;
