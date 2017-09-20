@@ -10,7 +10,7 @@ package classes;
  * @author elenacaballero
  */
 public class Assignment {
-    public String id;
+    public String id, ida, a;
     public ArithmeticExp aE;
     public Assignment ass;
 
@@ -23,5 +23,12 @@ public class Assignment {
         this.ass = ass;
     }
 
+    public Assignment(String ida, String a, String id) {
+        this.id = id;
+        this.ida = ida;
+        this.a = a;
+    }
+    
+    
     
 }

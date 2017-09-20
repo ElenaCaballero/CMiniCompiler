@@ -3,7 +3,7 @@
     "expressions": {
       "expression": {
         "printers": {
-          "literal": "\"Hola\"",
+          "literal": "\"un string con \"comillas\" adentro\"",
           "type": "printf"
         }
       },
@@ -77,6 +77,113 @@
                   "val": {
                     "token": "1",
                     "type": "bool"
+                  }
+                }
+              }
+            }
+          },
+          "expressions": {
+            "expression": {
+              "variableDeclaration": {
+                "type": {
+                  "tipo": "char"
+                },
+                "variables": {
+                  "id": "x",
+                  "value": {
+                    "token": "'t'",
+                    "type": "char"
+                  }
+                }
+              }
+            },
+            "expressions": {
+              "expression": {
+                "variableDeclaration": {
+                  "type": {
+                    "tipo": "char*"
+                  },
+                  "variables": {
+                    "id": "m",
+                    "value": {
+                      "token": "x",
+                      "type": "id"
+                    }
+                  }
+                }
+              },
+              "expressions": {
+                "expression": {
+                  "statements": {
+                    "whileStatement": {
+                      "c": {
+                        "valLeft": {
+                          "token": "x",
+                          "type": "id"
+                        },
+                        "valRight": {
+                          "token": "a",
+                          "type": "id"
+                        }
+                      },
+                      "e": {
+                        "expression": {
+                          "variableDeclaration": {
+                            "type": {
+                              "tipo": "int"
+                            },
+                            "variables": {
+                              "id": "&",
+                              "variables": {
+                                "id": "var",
+                                "value": {
+                                  "token": "20",
+                                  "type": "int"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "expressions": {
+                          "expression": {
+                            "variableDeclaration": {
+                              "type": {
+                                "tipo": "int*"
+                              },
+                              "variables": {
+                                "id": "id"
+                              }
+                            }
+                          },
+                          "expressions": {
+                            "expression": {
+                              "assignment": {
+                                "ass": {
+                                  "a": "&",
+                                  "id": "var",
+                                  "ida": "ip"
+                                }
+                              }
+                            },
+                            "expressions": {
+                              "expression": {
+                                "printers": {
+                                  "literal": "\"Address of var variable: \"",
+                                  "type": "printf",
+                                  "v": {
+                                    "id": "&",
+                                    "variables": {
+                                      "id": "var"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "whileS": "while"
+                    }
                   }
                 }
               }

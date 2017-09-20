@@ -10,7 +10,7 @@ package classes;
  * @author elenacaballero
  */
 public class Variables {
-    public String id;
+    public String id, ampersand;
     public Variables variables;
     public Value value;
 

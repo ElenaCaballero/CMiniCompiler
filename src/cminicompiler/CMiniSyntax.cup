@@ -216,6 +216,10 @@ variables ::= ID:id {:
 			  		Variables r = new Variables((String)id, val, v);
 			  		RESULT = r;
 		  		:}
+		  		| AMPERSAND:a variables:v {:
+		  			Variables r = new Variables((String)a,v);
+			  		RESULT = r;
+	  			:}
 			  	;
 
 statements ::= ifStatement:ifs 	{: 
@@ -460,6 +464,10 @@ assignmentProc ::= assignment:a SEMICOLON {:
 
 assignment ::= ID:id EQUALS arithmeticExp:aE {:
 					Assignment r = new Assignment((String)id, aE);
+					RESULT = r;
+				:}
+				|ID:ida EQUALS AMPERSAND:a ID:id {:
+					Assignment r = new Assignment((String)ida, (String)a, (String)id);
 					RESULT = r;
 				:}
 				;

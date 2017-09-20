@@ -1,7 +1,16 @@
 int main() {
-    printf("Hola");
+    printf("un string con \"comillas\" adentro");
     int a = 6;
     for (int i = 1; i > 10; i++){
         a = i * 8;
+    }
+    /*es un comentario*/
+    char x = 't';
+    char* m = x;
+    while(x == a){
+        int &var = 20;
+        int* id;
+        ip = &var;  /* store address of var in pointer variable*/
+        printf("Address of var variable: ", &var  );
     }
 }
