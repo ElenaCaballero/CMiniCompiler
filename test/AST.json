@@ -1,1 +1,93 @@
-{"mainClause":{"type":{"tipo":"int"},"main":"main","expressions":{"expressions":{"expressions":{"expression":{"statements":{"forStatement":{"forS":"for","init":{"type":"int","id":"i","val":{"type":"bool","token":"1"}},"c":{"valLeft":{"type":"id","token":"i"},"valRight":{"type":"int","token":"10"}},"aE":{"id":"i","aE":"+","aE1":"+","num":0},"e":{"expression":{"assignment":{"ass":{"id":"a","aE":{}}}}}}}}},"expression":{"variableDeclaration":{"type":{"tipo":"int"},"variables":{"id":"a","value":{"type":"int","token":"6"}}}}},"expression":{"printers":{"type":"printf","literal":"\"Hola\""}}}}}
+{
+  "mainClause": {
+    "expressions": {
+      "expression": {
+        "printers": {
+          "literal": "\"Hola\"",
+          "type": "printf"
+        }
+      },
+      "expressions": {
+        "expression": {
+          "variableDeclaration": {
+            "type": {
+              "tipo": "int"
+            },
+            "variables": {
+              "id": "a",
+              "value": {
+                "token": "6",
+                "type": "int"
+              }
+            }
+          }
+        },
+        "expressions": {
+          "expression": {
+            "statements": {
+              "forStatement": {
+                "aE": {
+                  "aE": "+",
+                  "aE1": "+",
+                  "id": "i",
+                  "num": 0
+                },
+                "c": {
+                  "valLeft": {
+                    "token": "i",
+                    "type": "id"
+                  },
+                  "valRight": {
+                    "token": "10",
+                    "type": "int"
+                  }
+                },
+                "e": {
+                  "expression": {
+                    "assignment": {
+                      "ass": {
+                        "aE": {
+                          "term": {
+                            "factor": {
+                              "val": {
+                                "token": "8",
+                                "type": "int"
+                              }
+                            },
+                            "opmult": "*",
+                            "term": {
+                              "factor": {
+                                "val": {
+                                  "token": "i",
+                                  "type": "id"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "id": "a"
+                      }
+                    }
+                  }
+                },
+                "forS": "for",
+                "init": {
+                  "id": "i",
+                  "type": "int",
+                  "val": {
+                    "token": "1",
+                    "type": "bool"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "main": "main",
+    "type": {
+      "tipo": "int"
+    }
+  }
+}

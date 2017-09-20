@@ -414,6 +414,10 @@ term ::= term:t opmult:opmult factor:f {:
 					RESULT = r;
 				}
 			:}
+			| term:t ASTERISK:ast factor:f {:
+				Term r = new Term(t, "*", f);
+					RESULT = r;
+			:}
 			| factor:f {:
 				Term r = new Term(f);
 				RESULT = r;
