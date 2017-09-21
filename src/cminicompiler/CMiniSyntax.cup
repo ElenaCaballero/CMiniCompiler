@@ -233,13 +233,31 @@ expression ::= variableDeclaration:vd {:
 
 returnStatement ::= RETURN:ret value:val SEMICOLON{:
 						ReturnStatement r = new ReturnStatement((String)ret, val);
+						RESULT = r;
 					:}
-
+					| error value SEMICOLON{:
+						System.err.println("Missing token, expected 'return'");
+					:}
+					| error SEMICOLON{:
+						System.err.println("Missing return value");
+					:}
+					| RETURN value error {:
+						System.err.println("Missing token, expected ';'");
+					:}
 					;
 
 variableDeclaration ::= type:t variables:v SEMICOLON {:
 							VariableDeclaration r = new VariableDeclaration(t, v);
 							RESULT = r;
+						:}
+						|error variables SEMICOLON {:
+							System.err.println("Expected a type declaration");
+						:}
+						|type:t variables error {:
+							System.err.println("Missing token, expected ';'");
+						:}
+						|error SEMICOLON{:
+							System.err.println("Expected variable or assignation");
 						:}
 						;
 
@@ -263,6 +281,9 @@ variables ::= ID:id {:
 		  			Variables r = new Variables((String)a,v);
 			  		RESULT = r;
 	  			:}
+	  			|error {:
+					System.err.println("Expected variable name");
+				:}
 			  	;
 
 statements ::= ifStatement:ifs 	{: 
