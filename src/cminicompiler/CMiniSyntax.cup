@@ -132,9 +132,15 @@ functionDeclaration ::= type:t ID:id LEFTPRNTH argumentList:a RIGHTPRNTH SEMICOL
 					FunctionDeclaration r = new FunctionDeclaration(t, (String)id, a);
 					RESULT = r;
 				:}
-				|error ID LEFTPRNTH argumentList RIGHTPRNTH SEMICOLON {:
-					System.err.println("Missing type");
+				|error LEFTPRNTH argumentList RIGHTPRNTH SEMICOLON {:
+					System.err.println("Missing token '('");
 				:} 
+				|error RIGHTPRNTH SEMICOLON {:
+					System.err.println("Missing token ')'");
+				:}
+				|error SEMICOLON {:
+					System.err.println("Missing token ';'");
+				:}
 				;
 
 functionList ::= function:f functionList:fl {:
@@ -225,13 +231,14 @@ expression ::= variableDeclaration:vd {:
 returnStatement ::= RETURN:ret value:val SEMICOLON{:
 						ReturnStatement r = new ReturnStatement((String)ret, val);
 					:}
+
 					;
 
 variableDeclaration ::= type:t variables:v SEMICOLON {:
 							VariableDeclaration r = new VariableDeclaration(t, v);
 							RESULT = r;
 						:}
-						| error variables SEMICOLON {:
+						| error SEMICOLON {:
 							System.err.println("Missing token ';' expected");
 						:}
 						;
@@ -280,6 +287,10 @@ ifStatement ::= IF:i LEFTPRNTH condition:c RIGHTPRNTH LEFTCBRAC expressions:e RI
 					IfStatement r = new IfStatement(i, eS);
 					RESULT = r;
 				:} 
+				| error LEFTPRNTH condition RIGHTPRNTH LEFTCBRAC expressions RIGHTCBRAC
+				| error RIGHTPRNTH LEFTCBRAC expressions RIGHTCBRAC
+				| error LEFTCBRAC expressions RIGHTCBRAC
+				| error RIGHTCBRAC
 				;
 
 elseStatement ::= ELSE:eS LEFTCBRAC expressions:e RIGHTCBRAC {: 
@@ -339,7 +350,9 @@ forStatement ::= FOR:f LEFTPRNTH inits:i SEMICOLON condition:c SEMICOLON forArth
 					ForStatement r = new ForStatement((String)f, i, c, aE, e);
 					RESULT = r;
 				:}
-				|error forStatement
+				|error forStatement {:
+					System.err.println("Missing token ';' expected");
+				:}
 				;
 
 inits ::= INT:i ID:id EQUALS value:v {:
