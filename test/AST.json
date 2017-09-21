@@ -1,1 +1,453 @@
-{"functionDeclaration":{"type":{"tipo":"char"},"id":"name","argumentlist":{"argument":{"type":{"tipo":"int"},"id":"a"}}},"mainClause":{"type":{"tipo":"int"},"main":"main","expressions":{"expressions":{"expressions":{"expressions":{"expressions":{"expressions":{"expressions":{"expression":{"retState":{"ret":"return","val":{"type":"bool","token":"0"}}}},"expression":{"statements":{"whileStatement":{"whileS":"while","c":{"valLeft":{"type":"id","token":"x"},"valRight":{"type":"id","token":"a"}},"e":{"expressions":{"expressions":{"expressions":{"expression":{"printers":{"type":"printf","literal":"\"Address of var variable: \"","v":{"vars":{"amper":"&","vars":{"id":{"term":{"factor":{"val":{"type":"id","token":"var"}}}}}}}}}},"expression":{"variableDeclaration":{"varDeclList":{"vars":{"id":{"term":{"factor":{"val":{"type":"id","token":"ip"}}}},"assignmentProc":{"ass":{"id":"&","amper":"var"}}}}}}},"expression":{"variableDeclaration":{"type":{"tipo":"int"},"varDeclList":{"vars":{"id":{"term":{"factor":{"val":{"type":"id","token":"id"}}}}}}}}},"expression":{"variableDeclaration":{"type":{"tipo":"int"},"varDeclList":{"vars":{"amper":"&","vars":{"id":{"term":{"factor":{"val":{"type":"id","token":"var"}}}},"assignmentProc":{"ass":{"aE":{"term":{"factor":{"val":{"type":"int","token":"20"}}}}}}}}}}}}}}}},"expression":{"variableDeclaration":{"type":{"tipo":"char*"},"varDeclList":{"vars":{"id":{"term":{"factor":{"val":{"type":"id","token":"m"}}}},"assignmentProc":{"ass":{"aE":{"term":{"factor":{"val":{"type":"id","token":"x"}}}}}}}}}}},"expression":{"variableDeclaration":{"type":{"tipo":"char"},"varDeclList":{"vars":{"id":{"term":{"factor":{"val":{"type":"id","token":"a"}}}},"assignmentProc":{"ass":{"aE":{"term":{"factor":{"val":{"type":"char","token":"'t'"}}}}}}}}}}},"expression":{"statements":{"forStatement":{"forS":"for","init":{"type":"int","id":"i","val":{"type":"bool","token":"1"}},"c":{"valLeft":{"type":"id","token":"i"},"valRight":{"type":"int","token":"10"}},"aE":{"id":"i","aE":"+","aE1":"+","num":0},"e":{"expression":{"variableDeclaration":{"varDeclList":{"vars":{"id":{"term":{"factor":{"val":{"type":"id","token":"a"}}}},"assignmentProc":{"ass":{"aE":{"term":{"term":{"factor":{"val":{"type":"id","token":"i"}}},"opmult":"*","factor":{"val":{"type":"int","token":"8"}}}}}}}}}}}}}}},"expression":{"variableDeclaration":{"type":{"tipo":"int"},"varDeclList":{"vars":{"id":{"term":{"factor":{"val":{"type":"id","token":"a"}}}},"assignmentProc":{"ass":{"aE":{"term":{"factor":{"val":{"type":"int","token":"6"}}}}}}}}}}},"expression":{"printers":{"type":"printf","literal":"\"un string con \"comillas\" adentro\""}}}},"functionList":{"function":{"i":{"tipo":"char"},"id":"name","argumentlist":{"argument":{"type":{"tipo":"int"},"id":"a"}},"expressions":{"expression":{"variableDeclaration":{"varDeclList":{"vars":{"id":{"term":{"factor":{"val":{"type":"id","token":"a"}}}},"assignmentProc":{"ass":{"aE":{"term":{"factor":{"val":{"type":"int","token":"9"}}}}}}}}}}}}}}
+{
+  "functionDeclaration": {
+    "argumentlist": {
+      "argument": {
+        "id": "a",
+        "type": {
+          "tipo": "int"
+        }
+      }
+    },
+    "id": "name",
+    "type": {
+      "tipo": "char"
+    }
+  },
+  "functionList": {
+    "function": {
+      "argumentlist": {
+        "argument": {
+          "id": "a",
+          "type": {
+            "tipo": "int"
+          }
+        }
+      },
+      "expressions": {
+        "expression": {
+          "variableDeclaration": {
+            "varDeclList": {
+              "vars": {
+                "assignmentProc": {
+                  "ass": {
+                    "aE": {
+                      "term": {
+                        "factor": {
+                          "val": {
+                            "token": "9",
+                            "type": "int"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "id": {
+                  "term": {
+                    "factor": {
+                      "val": {
+                        "token": "a",
+                        "type": "id"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "i": {
+        "tipo": "char"
+      },
+      "id": "name"
+    }
+  },
+  "mainClause": {
+    "expressions": {
+      "expression": {
+        "statements": {
+          "ifStatement": {
+            "c": {
+              "valLeft": {
+                "token": "a",
+                "type": "id"
+              },
+              "valRight": {
+                "token": "3",
+                "type": "int"
+              }
+            },
+            "e": {
+              "expression": {
+                "variableDeclaration": {
+                  "varDeclList": {
+                    "vars": {
+                      "assignmentProc": {
+                        "ass": {}
+                      },
+                      "id": {
+                        "term": {
+                          "factor": {
+                            "val": {
+                              "token": "a",
+                              "type": "id"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "ifS": "if"
+          }
+        }
+      },
+      "expressions": {
+        "expression": {
+          "printers": {
+            "literal": "\"un string con \"comillas\" adentro\"",
+            "type": "printf"
+          }
+        },
+        "expressions": {
+          "expression": {
+            "variableDeclaration": {
+              "type": {
+                "tipo": "int"
+              },
+              "varDeclList": {
+                "vars": {
+                  "assignmentProc": {
+                    "ass": {
+                      "aE": {
+                        "term": {
+                          "factor": {
+                            "val": {
+                              "token": "6",
+                              "type": "int"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "id": {
+                    "term": {
+                      "factor": {
+                        "val": {
+                          "token": "a",
+                          "type": "id"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "expressions": {
+            "expression": {
+              "statements": {
+                "forStatement": {
+                  "aE": {
+                    "aE": "+",
+                    "aE1": "+",
+                    "id": "i",
+                    "num": 0
+                  },
+                  "c": {
+                    "valLeft": {
+                      "token": "i",
+                      "type": "id"
+                    },
+                    "valRight": {
+                      "token": "10",
+                      "type": "int"
+                    }
+                  },
+                  "e": {
+                    "expression": {
+                      "variableDeclaration": {
+                        "varDeclList": {
+                          "vars": {
+                            "assignmentProc": {
+                              "ass": {
+                                "aE": {
+                                  "term": {
+                                    "factor": {
+                                      "val": {
+                                        "token": "8",
+                                        "type": "int"
+                                      }
+                                    },
+                                    "opmult": "*",
+                                    "term": {
+                                      "factor": {
+                                        "val": {
+                                          "token": "i",
+                                          "type": "id"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "id": {
+                              "term": {
+                                "factor": {
+                                  "val": {
+                                    "token": "a",
+                                    "type": "id"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "forS": "for",
+                  "init": {
+                    "id": "i",
+                    "type": "int",
+                    "val": {
+                      "token": "1",
+                      "type": "bool"
+                    }
+                  }
+                }
+              }
+            },
+            "expressions": {
+              "expression": {
+                "variableDeclaration": {
+                  "type": {
+                    "tipo": "char"
+                  },
+                  "varDeclList": {
+                    "vars": {
+                      "assignmentProc": {
+                        "ass": {
+                          "aE": {
+                            "term": {
+                              "factor": {
+                                "val": {
+                                  "token": "'t'",
+                                  "type": "char"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "id": {
+                        "term": {
+                          "factor": {
+                            "val": {
+                              "token": "a",
+                              "type": "id"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "expressions": {
+                "expression": {
+                  "variableDeclaration": {
+                    "type": {
+                      "tipo": "char*"
+                    },
+                    "varDeclList": {
+                      "vars": {
+                        "assignmentProc": {
+                          "ass": {
+                            "aE": {
+                              "term": {
+                                "factor": {
+                                  "val": {
+                                    "token": "x",
+                                    "type": "id"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "id": {
+                          "term": {
+                            "factor": {
+                              "val": {
+                                "token": "m",
+                                "type": "id"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "expressions": {
+                  "expression": {
+                    "statements": {
+                      "whileStatement": {
+                        "c": {
+                          "valLeft": {
+                            "token": "x",
+                            "type": "id"
+                          },
+                          "valRight": {
+                            "token": "a",
+                            "type": "id"
+                          }
+                        },
+                        "e": {
+                          "expression": {
+                            "variableDeclaration": {
+                              "type": {
+                                "tipo": "int"
+                              },
+                              "varDeclList": {
+                                "vars": {
+                                  "amper": "&",
+                                  "vars": {
+                                    "assignmentProc": {
+                                      "ass": {
+                                        "aE": {
+                                          "term": {
+                                            "factor": {
+                                              "val": {
+                                                "token": "20",
+                                                "type": "int"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "id": {
+                                      "term": {
+                                        "factor": {
+                                          "val": {
+                                            "token": "var",
+                                            "type": "id"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "expressions": {
+                            "expression": {
+                              "variableDeclaration": {
+                                "type": {
+                                  "tipo": "int"
+                                },
+                                "varDeclList": {
+                                  "vars": {
+                                    "id": {
+                                      "term": {
+                                        "factor": {
+                                          "val": {
+                                            "token": "id",
+                                            "type": "id"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "expressions": {
+                              "expression": {
+                                "variableDeclaration": {
+                                  "varDeclList": {
+                                    "vars": {
+                                      "assignmentProc": {
+                                        "ass": {
+                                          "amper": "var",
+                                          "id": "&"
+                                        }
+                                      },
+                                      "id": {
+                                        "term": {
+                                          "factor": {
+                                            "val": {
+                                              "token": "ip",
+                                              "type": "id"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "expressions": {
+                                "expression": {
+                                  "printers": {
+                                    "literal": "\"Address of var variable: \"",
+                                    "type": "printf",
+                                    "v": {
+                                      "vars": {
+                                        "amper": "&",
+                                        "vars": {
+                                          "id": {
+                                            "term": {
+                                              "factor": {
+                                                "val": {
+                                                  "token": "var",
+                                                  "type": "id"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "whileS": "while"
+                      }
+                    }
+                  },
+                  "expressions": {
+                    "expression": {
+                      "retState": {
+                        "ret": "return",
+                        "val": {
+                          "token": "0",
+                          "type": "bool"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "main": "main",
+    "type": {
+      "tipo": "int"
+    }
+  }
+}

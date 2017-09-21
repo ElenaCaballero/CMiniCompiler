@@ -1,6 +1,9 @@
 char name (int a);
 
 int main () {
+    if(a == 3){
+        a = a + 1;
+    }
     printf("un string con \"comillas\" adentro");
     int a = 6;
     for (int i = 1; i > 10; i++){
@@ -9,6 +12,7 @@ int main () {
     /*es un comentario*/
     char a = 't';
     char* m = x;
+    
     while(x == a){
         int &var = 20;
         int id;
