@@ -9,13 +9,11 @@ package classes;
  *
  * @author elenacaballero
  */
-public class VariableDeclaration {
-    public Types type; 
-    public VarDeclarationList varDeclList;
+public class AssignmentProc {
+    public Assignment ass;
 
-    public VariableDeclaration(Types type, VarDeclarationList varDeclList) {
-        this.type = type;
-        this.varDeclList = varDeclList;
+    public AssignmentProc(Assignment ass) {
+        this.ass = ass;
     }
-
+    
 }

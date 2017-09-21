@@ -9,13 +9,17 @@ package classes;
  *
  * @author elenacaballero
  */
-public class VariableDeclaration {
-    public Types type; 
+public class VarDeclarationList {
     public VarDeclarationList varDeclList;
+    public Variables vars;
 
-    public VariableDeclaration(Types type, VarDeclarationList varDeclList) {
-        this.type = type;
+    public VarDeclarationList(VarDeclarationList varDeclList, Variables vars) {
         this.varDeclList = varDeclList;
+        this.vars = vars;
     }
 
+    public VarDeclarationList(Variables vars) {
+        this.vars = vars;
+    }
+    
 }

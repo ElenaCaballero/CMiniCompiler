@@ -10,25 +10,28 @@ package classes;
  * @author elenacaballero
  */
 public class Assignment {
-    public String id, ida, a;
+    public String id, amper;
     public ArithmeticExp aE;
-    public Assignment ass;
+    public Value vals;
+    public VarDeclarationList varDecList;
 
-    public Assignment(String id, ArithmeticExp aE) {
-        this.id = id;
+    public Assignment(ArithmeticExp aE) {
         this.aE = aE;
     }
 
-    public Assignment(Assignment ass) {
-        this.ass = ass;
+    public Assignment(VarDeclarationList varDecList) {
+        this.varDecList = varDecList;
     }
 
-    public Assignment(String ida, String a, String id) {
-        this.id = id;
-        this.ida = ida;
-        this.a = a;
+    public Assignment(Value vals, VarDeclarationList varDecList) {
+        this.vals = vals;
+        this.varDecList = varDecList;
     }
-    
-    
+
+    public Assignment(String id, String amper) {
+        this.id = id;
+        this.amper = amper;
+    }
+
     
 }

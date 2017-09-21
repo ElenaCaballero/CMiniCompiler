@@ -80,6 +80,7 @@ non terminal Statements statements;
 non terminal Scanners scanners;
 non terminal Printers printers;
 non terminal Variables variables;
+non terminal VarDeclarationList varDeclList;
 non terminal Value value;
 non terminal IfStatement ifStatement;
 non terminal ElseStatement elseStatement;
@@ -94,7 +95,8 @@ non terminal ArithmeticExp artExp;
 non terminal Term term;
 non terminal Factor factor;
 non terminal Assignment assignment;
-non terminal Assignment assignmentProc;
+non terminal Assignment valAssignment;
+non terminal AssignmentProc assignmentProc;
 non terminal String opsum;
 non terminal String opmult;
 non terminal String operators;
@@ -135,14 +137,14 @@ functionDeclaration ::= type:t ID:id LEFTPRNTH argumentList:a RIGHTPRNTH SEMICOL
 				|error ID LEFTPRNTH argumentList RIGHTPRNTH SEMICOLON {:
 					System.err.println("Missing function type");
 				:} 
-				|error LEFTPRNTH argumentList RIGHTPRNTH SEMICOLON {:
+				|type error LEFTPRNTH argumentList RIGHTPRNTH SEMICOLON {:
 					System.err.println("Missing id");
 				:}
-				|error argumentList RIGHTPRNTH SEMICOLON {:
+				|type ID error argumentList RIGHTPRNTH SEMICOLON {:
 					System.err.println("Missing token '('");
 				:}
-				|error SEMICOLON {:
-					System.err.println("Missing token hello");
+				|type ID LEFTPRNTH argumentList error SEMICOLON {:
+					System.err.println("Missing token ')'");
 				:}
 				;
 
@@ -181,7 +183,7 @@ argumentList ::= argument:a COMMA argumentList:al {:
 				:}
 				;
 
-argument ::= type:t ID:id  {:
+argument ::= type:t ID:id {:
 					Argument r = new Argument(t, (String)id);
 					RESULT = r;
 				:}
@@ -221,10 +223,6 @@ expression ::= variableDeclaration:vd {:
 					Expression r = new Expression(rs);
 					RESULT = r;
 				:}
-				| assignmentProc:a {:
-					Expression r = new Expression(a);
-					RESULT = r;
-				:}
 				| BREAK:b {:
 					Expression r = new Expression((String)b);
 					RESULT = r;
@@ -235,10 +233,7 @@ returnStatement ::= RETURN:ret value:val SEMICOLON{:
 						ReturnStatement r = new ReturnStatement((String)ret, val);
 						RESULT = r;
 					:}
-					| error value SEMICOLON{:
-						System.err.println("Missing token, expected 'return'");
-					:}
-					| error SEMICOLON{:
+					| RETURN error SEMICOLON{:
 						System.err.println("Missing return value");
 					:}
 					| RETURN value error {:
@@ -246,45 +241,60 @@ returnStatement ::= RETURN:ret value:val SEMICOLON{:
 					:}
 					;
 
-variableDeclaration ::= type:t variables:v SEMICOLON {:
+variableDeclaration ::= type:t varDeclList:v SEMICOLON {:
 							VariableDeclaration r = new VariableDeclaration(t, v);
 							RESULT = r;
 						:}
-						|error variables SEMICOLON {:
-							System.err.println("Expected a type declaration");
-						:}
-						|type:t variables error {:
-							System.err.println("Missing token, expected ';'");
-						:}
-						|error SEMICOLON{:
-							System.err.println("Expected variable or assignation");
-						:}
 						;
 
-variables ::= ID:id {:
-					Variables r = new Variables((String)id);
+varDeclList ::= varDeclList:v COMMA variables:vars {:
+					VarDeclarationList r = new VarDeclarationList(v,vars);
 					RESULT = r;
 				:}
-			  	| ID:id COMMA variables:v {:
-		  			Variables r = new Variables((String)id, v);
-		  			RESULT = r;
-		  		:}
-			  	| ID:id EQUALS value:val {:
-		  			Variables r = new Variables((String)id, val);
-		  			RESULT = r;
-		  		:}
-			  	| ID:id EQUALS value:val COMMA variables:v {:
-			  		Variables r = new Variables((String)id, val, v);
-			  		RESULT = r;
-		  		:}
+				| variables:vars {:
+					VarDeclarationList r = new VarDeclarationList(vars);
+					RESULT = r;
+				:}
+				;
+
+variables ::= ID:id assignmentProc:a {:
+					Variables r = new Variables((String)id, a);
+					RESULT = r;
+				:}
 		  		| AMPERSAND:a variables:v {:
-		  			Variables r = new Variables((String)a,v);
+		  			Variables r = new Variables((String)a, v);
 			  		RESULT = r;
 	  			:}
-	  			|error {:
-					System.err.println("Expected variable name");
-				:}
 			  	;
+
+assignmentProc ::= EQUALS assignment:a {:
+						AssignmentProc r = new AssignmentProc(a);
+						RESULT = r;
+					:}
+					;
+
+assignment ::= arithmeticExp:aE {:
+					Assignment r = new Assignment(aE);
+					RESULT = r;
+				:}
+				| value:val valAssignment:vA {:
+					Assignment r = new Assignment(val, vA);
+					RESULT = r;
+				:}
+				| AMPERSAND:a ID:id {:
+					Assignment r = new Assignment((String)a, (String)id);
+					RESULT = r;
+				:}
+				;
+
+valAssignment ::= COMMA varDeclList:v {:
+					Assignment r = new Assignment(v);
+					RESULT = r;
+				:}
+				| {:
+					RESULT = null;
+				:}
+				;
 
 statements ::= ifStatement:ifs 	{: 
 					Statements r = new Statements(ifs);
@@ -521,21 +531,7 @@ opmult ::= ARTHMEXPMULT:op {:
 			:}
 			;
 
-assignmentProc ::= assignment:a SEMICOLON {:
-					Assignment r = new Assignment(a);
-					RESULT = r;
-				:}
-				;
 
-assignment ::= ID:id EQUALS arithmeticExp:aE {:
-					Assignment r = new Assignment((String)id, aE);
-					RESULT = r;
-				:}
-				|ID:ida EQUALS AMPERSAND:a ID:id {:
-					Assignment r = new Assignment((String)ida, (String)a, (String)id);
-					RESULT = r;
-				:}
-				;
 
 
 

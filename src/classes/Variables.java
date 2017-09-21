@@ -10,30 +10,18 @@ package classes;
  * @author elenacaballero
  */
 public class Variables {
-    public String id, ampersand;
-    public Variables variables;
-    public Value value;
+    public String id, amper;
+    public AssignmentProc assignmentProc;
+    public Variables vars;
 
-    public Variables(String id) {
+    public Variables(String id, AssignmentProc assignmentProc) {
         this.id = id;
+        this.assignmentProc = assignmentProc;
     }
 
-    public Variables(String id, Variables variables) {
-        this.id = id;
-        this.variables = variables;
+    public Variables(String amper, Variables vars) {
+        this.amper = amper;
+        this.vars = vars;
     }
-
-    public Variables(String id, Value value) {
-        this.id = id;
-        this.value = value;
-    }
-
-    public Variables(String id, Value value, Variables variables) {
-        this.id = id;
-        this.variables = variables;
-        this.value = value;
-    }
-    
-           
-            
+        
 }
