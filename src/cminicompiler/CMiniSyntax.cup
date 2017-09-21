@@ -162,10 +162,16 @@ function ::= type:t ID:id LEFTPRNTH argumentList:a RIGHTPRNTH LEFTCBRAC expressi
 					Function r = new Function(t, (String)id, a, e);
 					RESULT = r;
 				:}
-				|error argumentList RIGHTPRNTH LEFTCBRAC expressions RIGHTCBRAC {:
+				|type error LEFTPRNTH argumentList RIGHTPRNTH LEFTCBRAC expressions RIGHTCBRAC {:
+					System.err.println("Missing Id");
+				:}
+				|error ID LEFTPRNTH argumentList RIGHTPRNTH LEFTCBRAC expressions RIGHTCBRAC {:
+					System.err.println("Missing function type");
+				:}
+				|type ID error argumentList RIGHTPRNTH LEFTCBRAC expressions RIGHTCBRAC {:
 					System.err.println("Missing token '('");
 				:}
-				|error LEFTCBRAC expressions RIGHTCBRAC {:
+				|type ID LEFTPRNTH argumentList error LEFTCBRAC expressions RIGHTCBRAC {:
 					System.err.println("Missing token ')'");
 				:}
 				;
@@ -181,11 +187,20 @@ argumentList ::= argument:a COMMA argumentList:al {:
 				|  {:
 					RESULT = null;
 				:}
+				| argument error argumentList {:
+					System.err.println("Missing token ','");
+				:}
 				;
 
 argument ::= type:t ID:id {:
 					Argument r = new Argument(t, (String)id);
 					RESULT = r;
+				:}
+				| error ID {:  
+					System.err.println("Missing id");
+				:}
+				| type error {:  
+					System.err.println("Missing argument type");
 				:}
 				;
 
@@ -318,10 +333,21 @@ ifStatement ::= IF:i LEFTPRNTH condition:c RIGHTPRNTH LEFTCBRAC expressions:e RI
 					IfStatement r = new IfStatement(i, eS);
 					RESULT = r;
 				:} 
-				| error LEFTPRNTH condition RIGHTPRNTH LEFTCBRAC expressions RIGHTCBRAC
-				| error RIGHTPRNTH LEFTCBRAC expressions RIGHTCBRAC
-				| error LEFTCBRAC expressions RIGHTCBRAC
-				| error RIGHTCBRAC
+				| IF error condition RIGHTPRNTH LEFTCBRAC expressions RIGHTCBRAC {:
+					System.err.println("Missing token '('");
+				:}
+				| IF LEFTPRNTH condition error LEFTCBRAC expressions RIGHTCBRAC{:
+					System.err.println("Missing token ')'");
+				:}
+				| IF LEFTPRNTH condition RIGHTPRNTH error expressions RIGHTCBRAC{:
+					System.err.println("Missing token '{'");
+				:}
+				| IF LEFTPRNTH condition RIGHTPRNTH LEFTCBRAC expressions error{:
+					System.err.println("Missing token '}'");
+				:}
+				| IF LEFTPRNTH error RIGHTPRNTH LEFTCBRAC expressions RIGHTCBRAC{:
+					System.err.println("IF expected a condition");
+				:}
 				;
 
 elseStatement ::= ELSE:eS LEFTCBRAC expressions:e RIGHTCBRAC {: 
@@ -332,6 +358,15 @@ elseStatement ::= ELSE:eS LEFTCBRAC expressions:e RIGHTCBRAC {:
 					ElseStatement r = new ElseStatement((String)e, ifS);
 					RESULT = r;
 				:}
+				| error LEFTCBRAC expressions RIGHTCBRAC{:
+					System.err.println("Missing token 'else'");
+				:}
+				| ELSE error expressions RIGHTCBRAC{:
+					System.err.println("Missing token '{'");
+				:}
+				| ELSE LEFTCBRAC expressions error{:
+					System.err.println("Missing token '}'");
+				:}
 				;
 
 condition ::= value:v1 operators:b value:v2 {:
@@ -341,6 +376,15 @@ condition ::= value:v1 operators:b value:v2 {:
 			| value:v1 operators:b value:v2 andOr:aO {:
 				Condition r = new Condition(v1,(String)b,v2,aO);
 				RESULT = r;
+			:}
+			| error operators value{:
+				System.err.println("Expected an initial value");
+			:}
+			| value operators error{:
+				System.err.println("Expected a final value");
+			:}
+			| value error value{:
+				System.err.println("Expected an operator");
 			:}
 			;
 
@@ -375,17 +419,47 @@ whileStatement ::= WHILE:w LEFTPRNTH condition:c RIGHTPRNTH LEFTCBRAC expression
 					WhileStatement r = new WhileStatement((String)w, c, e);
 					RESULT = r;
 				:}
+				|WHILE error condition RIGHTPRNTH LEFTCBRAC expressions RIGHTCBRAC {:
+					System.err.println("Missing token '('");
+				:}
+				|WHILE LEFTPRNTH condition error LEFTCBRAC expressions RIGHTCBRAC {:
+					System.err.println("Missing token ')'");
+				:}
+				|WHILE LEFTPRNTH condition RIGHTPRNTH error expressions RIGHTCBRAC {:
+					System.err.println("Missing token '{'");
+				:}
+				|WHILE LEFTPRNTH condition RIGHTPRNTH LEFTCBRAC expressions error {:
+					System.err.println("Missing token '}'");
+				:}
 				;
 
 forStatement ::= FOR:f LEFTPRNTH inits:i SEMICOLON condition:c SEMICOLON forArthmExp:aE RIGHTPRNTH LEFTCBRAC expressions:e RIGHTCBRAC{:
 					ForStatement r = new ForStatement((String)f, i, c, aE, e);
 					RESULT = r;
 				:}
+				|FOR error inits SEMICOLON condition SEMICOLON forArthmExp RIGHTPRNTH LEFTCBRAC expressions RIGHTCBRAC {:
+					System.err.println("Missing token '('");
+				:}
+				|FOR LEFTPRNTH inits SEMICOLON condition SEMICOLON forArthmExp error LEFTCBRAC expressions RIGHTCBRAC {:
+					System.err.println("Missing token ')'");
+				:}
+				|FOR LEFTPRNTH inits SEMICOLON condition SEMICOLON forArthmExp RIGHTPRNTH error expressions RIGHTCBRAC {:
+					System.err.println("Missing token '{'");
+				:}
+				|FOR LEFTPRNTH inits SEMICOLON condition SEMICOLON forArthmExp RIGHTPRNTH LEFTCBRAC expressions error {:
+					System.err.println("Missing token '}'");
+				:}
 				;
 
 inits ::= INT:i ID:id EQUALS value:v {:
 			Inits r = new Inits((String)i, (String)id,v);
 			RESULT = r;
+		:}
+		|INT ID error value {:
+			System.err.println("Missing token '='");
+		:}
+		|INT error EQUALS value {:
+			System.err.println("Expected an id");
 		:}
 		;
 
@@ -404,9 +478,18 @@ forArthmExp ::= ID:id ARTHMEXPSUM:aES1 ARTHMEXPSUM:aES2 {:
 			:}
 			;
 
-scanners ::= SCANF:sf LEFTPRNTH CONSTSTR:sl COMMA variables:v RIGHTPRNTH SEMICOLON {:
+scanners ::= SCANF:sf LEFTPRNTH CONSTSTR:sl COMMA varDeclList:v RIGHTPRNTH SEMICOLON {:
 				Scanners r= new Scanners((String)sf,sl,v);
 				RESULT = r;
+			:}
+			|SCANF error CONSTSTR COMMA varDeclList RIGHTPRNTH SEMICOLON {:
+				System.err.println("Missing token '('");
+			:}
+			|SCANF LEFTPRNTH CONSTSTR COMMA varDeclList error SEMICOLON {:
+				System.err.println("Missing token ')'");
+			:}
+			|SCANF LEFTPRNTH CONSTSTR COMMA varDeclList RIGHTPRNTH error {:
+				System.err.println("Missing token ';'");
 			:}
 			;
 
@@ -414,9 +497,27 @@ printers ::= PRINTF:pf LEFTPRNTH CONSTSTR:sl RIGHTPRNTH SEMICOLON:s {:
 				Printers r = new Printers((String)pf,sl);
 				RESULT = r;
 			:}
-			|PRINTF:pf LEFTPRNTH CONSTSTR:sl COMMA variables:v RIGHTPRNTH SEMICOLON{:
+			|PRINTF error CONSTSTR RIGHTPRNTH SEMICOLON {:
+				System.err.println("Missing token '('");
+			:}
+			|PRINTF LEFTPRNTH CONSTSTR error SEMICOLON {:
+				System.err.println("Missing token ')'");
+			:}
+			|PRINTF LEFTPRNTH CONSTSTR RIGHTPRNTH error {:
+				System.err.println("Missing token ';'");
+			:}
+			|PRINTF:pf LEFTPRNTH CONSTSTR:sl COMMA varDeclList:v RIGHTPRNTH SEMICOLON{:
 				Printers r= new Printers((String)pf,sl,v);
 				RESULT = r;
+			:}
+			|PRINTF error CONSTSTR COMMA varDeclList RIGHTPRNTH SEMICOLON {:
+				System.err.println("Missing token '('");
+			:}
+			|PRINTF LEFTPRNTH CONSTSTR COMMA varDeclList error SEMICOLON {:
+				System.err.println("Missing token ')'");
+			:}
+			|PRINTF LEFTPRNTH CONSTSTR COMMA varDeclList RIGHTPRNTH error {:
+				System.err.println("Missing token ';'");
 			:}
 			;
 

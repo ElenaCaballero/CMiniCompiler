@@ -11,14 +11,14 @@ package classes;
  */
 public class Printers {
     public String type, literal;
-    public Variables v;
+    public VarDeclarationList v;
 
     public Printers(String type, String literal) {
         this.type = type;
         this.literal = literal;
     }
 
-    public Printers(String type, String literal, Variables v) {
+    public Printers(String type, String literal, VarDeclarationList v) {
         this.type = type;
         this.literal = literal;
         this.v = v;

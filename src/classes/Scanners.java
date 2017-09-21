@@ -11,9 +11,9 @@ package classes;
  */
 public class Scanners {
     public String type, literal;
-    public Variables v;
+    public VarDeclarationList v;
 
-    public Scanners(String type, String literal, Variables v) {
+    public Scanners(String type, String literal, VarDeclarationList v) {
         this.type = type;
         this.literal = literal;
         this.v = v;
