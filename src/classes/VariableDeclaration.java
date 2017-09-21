@@ -18,4 +18,10 @@ public class VariableDeclaration {
         this.varDeclList = varDeclList;
     }
 
+    public VariableDeclaration(VarDeclarationList varDeclList) {
+        this.varDeclList = varDeclList;
+    }
+    
+    
+
 }

@@ -100,6 +100,7 @@ non terminal AssignmentProc assignmentProc;
 non terminal String opsum;
 non terminal String opmult;
 non terminal String operators;
+non terminal String ident;
 
 precedence left OR;
 precedence nonassoc BOOLEXP;
@@ -187,17 +188,11 @@ argumentList ::= argument:a COMMA argumentList:al {:
 				|  {:
 					RESULT = null;
 				:}
-				| argument error argumentList {:
-					System.err.println("Missing token ','");
-				:}
 				;
 
 argument ::= type:t ID:id {:
 					Argument r = new Argument(t, (String)id);
 					RESULT = r;
-				:}
-				| error ID {:  
-					System.err.println("Missing id");
 				:}
 				| type error {:  
 					System.err.println("Missing argument type");
@@ -260,6 +255,10 @@ variableDeclaration ::= type:t varDeclList:v SEMICOLON {:
 							VariableDeclaration r = new VariableDeclaration(t, v);
 							RESULT = r;
 						:}
+						| varDeclList:v SEMICOLON {:
+							VariableDeclaration r = new VariableDeclaration(v);
+							RESULT = r;
+						:}
 						;
 
 varDeclList ::= varDeclList:v COMMA variables:vars {:
@@ -272,8 +271,8 @@ varDeclList ::= varDeclList:v COMMA variables:vars {:
 				:}
 				;
 
-variables ::= ID:id assignmentProc:a {:
-					Variables r = new Variables((String)id, a);
+variables ::= ident:id assignmentProc:a {:
+					Variables r = new Variables(id, a);
 					RESULT = r;
 				:}
 		  		| AMPERSAND:a variables:v {:
@@ -286,14 +285,13 @@ assignmentProc ::= EQUALS assignment:a {:
 						AssignmentProc r = new AssignmentProc(a);
 						RESULT = r;
 					:}
+					| {:
+						RESULT = null;
+					:}
 					;
 
 assignment ::= arithmeticExp:aE {:
 					Assignment r = new Assignment(aE);
-					RESULT = r;
-				:}
-				| value:val valAssignment:vA {:
-					Assignment r = new Assignment(val, vA);
 					RESULT = r;
 				:}
 				| AMPERSAND:a ID:id {:
@@ -302,14 +300,76 @@ assignment ::= arithmeticExp:aE {:
 				:}
 				;
 
-valAssignment ::= COMMA varDeclList:v {:
-					Assignment r = new Assignment(v);
+artExp ::= arithmeticExp:ae SEMICOLON {:
+			ArithmeticExp r = new ArithmeticExp(ae);
+			RESULT = r;
+		:}
+		;
+
+arithmeticExp ::= arithmeticExp:e opsum:opsum term:t {:
+						if (opsum == "+") {
+							ArithmeticExp r = new ArithmeticExp(e, "+", t);
+							RESULT = r;
+						}else if (opsum == "-") {
+							ArithmeticExp r = new ArithmeticExp(e, "-", t);
+							RESULT = r;
+						}
+					:}
+					|term:t {:
+						ArithmeticExp r = new ArithmeticExp(t);
+						RESULT = r;
+					:}
+					;
+
+term ::= term:t opmult:opmult factor:f {:
+				if (opmult == "*") {
+					Term r = new Term(t, "*", f);
 					RESULT = r;
-				:}
-				| {:
-					RESULT = null;
-				:}
-				;
+				}else if (opmult == "/") {
+					Term r = new Term(t, "/", f);
+					RESULT = r;
+				}
+			:}
+			| term:t ASTERISK:ast factor:f {:
+				Term r = new Term(t, "*", f);
+					RESULT = r;
+			:}
+			| factor:f {:
+				Term r = new Term(f);
+				RESULT = r;
+			:}
+			;
+
+factor ::= LEFTPRNTH arithmeticExp:e RIGHTPRNTH {:
+				Factor r = new Factor(e);
+				RESULT = r;
+			:}
+			|value:val {:
+				Factor r = new Factor(val);
+				RESULT = r;
+			:}
+			;
+
+value ::= ident:id {:
+				RESULT = new Value(id, "id");
+			:}
+			|INTEGER:num {:
+				RESULT = new Value((String)num, "int");
+			:}
+			|CONSTCHAR:character {:
+				RESULT = new Value((String)character, "char");
+			:}
+			|BOOLTOF:tF {:
+				RESULT = new Value((String)tF, "bool");
+			:}
+			|NULL:n {:
+				RESULT = new Value((String)n, "null");
+			:}
+			;
+
+ident ::= ID:id{:
+		RESULT = id;
+	:};
 
 statements ::= ifStatement:ifs 	{: 
 					Statements r = new Statements(ifs);
@@ -357,9 +417,6 @@ elseStatement ::= ELSE:eS LEFTCBRAC expressions:e RIGHTCBRAC {:
 				| ELSE:e ifStatement:ifS {:
 					ElseStatement r = new ElseStatement((String)e, ifS);
 					RESULT = r;
-				:}
-				| error LEFTCBRAC expressions RIGHTCBRAC{:
-					System.err.println("Missing token 'else'");
 				:}
 				| ELSE error expressions RIGHTCBRAC{:
 					System.err.println("Missing token '{'");
@@ -497,6 +554,10 @@ printers ::= PRINTF:pf LEFTPRNTH CONSTSTR:sl RIGHTPRNTH SEMICOLON:s {:
 				Printers r = new Printers((String)pf,sl);
 				RESULT = r;
 			:}
+			|PRINTF:pf LEFTPRNTH CONSTSTR:sl COMMA varDeclList:v RIGHTPRNTH SEMICOLON{:
+				Printers r= new Printers((String)pf,sl,v);
+				RESULT = r;
+			:}
 			|PRINTF error CONSTSTR RIGHTPRNTH SEMICOLON {:
 				System.err.println("Missing token '('");
 			:}
@@ -506,10 +567,6 @@ printers ::= PRINTF:pf LEFTPRNTH CONSTSTR:sl RIGHTPRNTH SEMICOLON:s {:
 			|PRINTF LEFTPRNTH CONSTSTR RIGHTPRNTH error {:
 				System.err.println("Missing token ';'");
 			:}
-			|PRINTF:pf LEFTPRNTH CONSTSTR:sl COMMA varDeclList:v RIGHTPRNTH SEMICOLON{:
-				Printers r= new Printers((String)pf,sl,v);
-				RESULT = r;
-			:}
 			|PRINTF error CONSTSTR COMMA varDeclList RIGHTPRNTH SEMICOLON {:
 				System.err.println("Missing token '('");
 			:}
@@ -518,23 +575,6 @@ printers ::= PRINTF:pf LEFTPRNTH CONSTSTR:sl RIGHTPRNTH SEMICOLON:s {:
 			:}
 			|PRINTF LEFTPRNTH CONSTSTR COMMA varDeclList RIGHTPRNTH error {:
 				System.err.println("Missing token ';'");
-			:}
-			;
-
-value ::= ID:id {:
-				RESULT = new Value((String)id, "id");
-			:}
-			|INTEGER:num {:
-				RESULT = new Value((String)num, "int");
-			:}
-			|CONSTCHAR:character {:
-				RESULT = new Value((String)character, "char");
-			:}
-			|BOOLTOF:tF {:
-				RESULT = new Value((String)tF, "bool");
-			:}
-			|NULL:n {:
-				RESULT = new Value((String)n, "null");
 			:}
 			;
 
@@ -564,55 +604,6 @@ type ::= INT:i {:
 		:}
 		;
 
-artExp ::= arithmeticExp:ae SEMICOLON {:
-			ArithmeticExp r = new ArithmeticExp(ae);
-			RESULT = r;
-		:}
-		;
-
-arithmeticExp ::= arithmeticExp:e opsum:opsum term:t {:
-						if (opsum == "+") {
-							ArithmeticExp r = new ArithmeticExp(e, "+", t);
-							RESULT = r;
-						}else if (opsum == "-") {
-							ArithmeticExp r = new ArithmeticExp(e, "-", t);
-							RESULT = r;
-						}
-					:}
-					|term:t {:
-						ArithmeticExp r = new ArithmeticExp(t);
-						RESULT = r;
-					:}
-					;
-
-term ::= term:t opmult:opmult factor:f {:
-				if (opmult == "*") {
-					Term r = new Term(t, "*", f);
-					RESULT = r;
-				}else if (opmult == "/") {
-					Term r = new Term(t, "/", f);
-					RESULT = r;
-				}
-			:}
-			| term:t ASTERISK:ast factor:f {:
-				Term r = new Term(t, "*", f);
-					RESULT = r;
-			:}
-			| factor:f {:
-				Term r = new Term(f);
-				RESULT = r;
-			:}
-			;
-
-factor ::= LEFTPRNTH arithmeticExp:e RIGHTPRNTH {:
-				Factor r = new Factor(e);
-				RESULT = r;
-			:}
-			|value:val {:
-				Factor r = new Factor(val);
-				RESULT = r;
-			:}
-			;
 
 opsum ::= ARTHMEXPSUM:op {:
 				if (op == "+") {
