@@ -1,6 +1,6 @@
-char name(int a);
+char name (int a);
 
-int main() {
+int main () {
     printf("un string con \"comillas\" adentro");
     int a = 6;
     for (int i = 1; i > 10; i++){
@@ -17,6 +17,6 @@ int main() {
     }
 }
 
-char name(int a){
+char name (int a){
     a = 9;
 }

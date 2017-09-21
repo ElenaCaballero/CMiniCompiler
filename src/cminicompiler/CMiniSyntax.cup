@@ -21,7 +21,7 @@ public CMiniProgram root = null;
 					m.append(", column "+(s.right+1));
 			}
 			if (s.sym == 0) {
-				m.append(" : Part of declaration is missing");
+				m.append(" : Part of declaration (main or function) is missing");
 			}else{
 				m.append(" Unexpected token: "+ getToken(s.sym));
 			}
@@ -132,14 +132,17 @@ functionDeclaration ::= type:t ID:id LEFTPRNTH argumentList:a RIGHTPRNTH SEMICOL
 					FunctionDeclaration r = new FunctionDeclaration(t, (String)id, a);
 					RESULT = r;
 				:}
-				|error LEFTPRNTH argumentList RIGHTPRNTH SEMICOLON {:
-					System.err.println("Missing token '('");
+				|error ID LEFTPRNTH argumentList RIGHTPRNTH SEMICOLON {:
+					System.err.println("Missing function type");
 				:} 
-				|error RIGHTPRNTH SEMICOLON {:
-					System.err.println("Missing token ')'");
+				|error LEFTPRNTH argumentList RIGHTPRNTH SEMICOLON {:
+					System.err.println("Missing id");
+				:}
+				|error argumentList RIGHTPRNTH SEMICOLON {:
+					System.err.println("Missing token '('");
 				:}
 				|error SEMICOLON {:
-					System.err.println("Missing token ';'");
+					System.err.println("Missing token hello");
 				:}
 				;
 
@@ -157,10 +160,10 @@ function ::= type:t ID:id LEFTPRNTH argumentList:a RIGHTPRNTH LEFTCBRAC expressi
 					Function r = new Function(t, (String)id, a, e);
 					RESULT = r;
 				:}
-				|error LEFTPRNTH argumentList RIGHTPRNTH LEFTCBRAC expressions RIGHTCBRAC {:
+				|error argumentList RIGHTPRNTH LEFTCBRAC expressions RIGHTCBRAC {:
 					System.err.println("Missing token '('");
 				:}
-				|error RIGHTPRNTH LEFTCBRAC expressions RIGHTCBRAC {:
+				|error LEFTCBRAC expressions RIGHTCBRAC {:
 					System.err.println("Missing token ')'");
 				:}
 				;
@@ -237,9 +240,6 @@ returnStatement ::= RETURN:ret value:val SEMICOLON{:
 variableDeclaration ::= type:t variables:v SEMICOLON {:
 							VariableDeclaration r = new VariableDeclaration(t, v);
 							RESULT = r;
-						:}
-						| error SEMICOLON {:
-							System.err.println("Missing token ';' expected");
 						:}
 						;
 
@@ -349,9 +349,6 @@ whileStatement ::= WHILE:w LEFTPRNTH condition:c RIGHTPRNTH LEFTCBRAC expression
 forStatement ::= FOR:f LEFTPRNTH inits:i SEMICOLON condition:c SEMICOLON forArthmExp:aE RIGHTPRNTH LEFTCBRAC expressions:e RIGHTCBRAC{:
 					ForStatement r = new ForStatement((String)f, i, c, aE, e);
 					RESULT = r;
-				:}
-				|error forStatement {:
-					System.err.println("Missing token ';' expected");
 				:}
 				;
 
