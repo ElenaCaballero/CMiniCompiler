@@ -74,6 +74,7 @@ null = "null"|"NULL"
     "{"                 { return symbol("{", sym.LEFTCBRAC); }
     "}"                 { return symbol("}", sym.RIGHTCBRAC); }
     "*"                 { return symbol("*", sym.ASTERISK); }
+    "/"                 { return symbol("*", sym.DIVIDE); }
     "="                 { return symbol("=", sym.EQUALS); }
     "&"                 { return symbol("&", sym.AMPERSAND); }
     "%d"                { return symbol("%d", sym.DECIMALINT); }
@@ -89,7 +90,6 @@ null = "null"|"NULL"
     "int"               { return symbol("int", sym.INT); }
     "char"              { return symbol("char", sym.CHAR); }
     {arthmexpSUM}       { return symbol("arthmExpSUM", sym.ARTHMEXPSUM,yytext()); }
-    {arthmexpMULT}      { return symbol("arthmExpMULT", sym.ARTHMEXPMULT,yytext()); }
     {boolexp}           { return symbol("boolexp", sym.BOOLEXP,yytext()); }
     {null}              { return symbol("null", sym.NULL, yytext()); }
     {boolToF}           { return symbol("boolToF", sym.BOOLTOF, yytext()); }

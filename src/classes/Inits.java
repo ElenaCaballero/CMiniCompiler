@@ -12,6 +12,7 @@ package classes;
 public class Inits {
     public String type, id;
     public Value val;
+    public Factor fact;
 
     public Inits(String type, String id, Value val) {
         this.type = type;
@@ -19,5 +20,10 @@ public class Inits {
         this.val = val;
     }
     
+    public Inits(String type, String id, Factor val) {
+        this.type = type;
+        this.id = id;
+        this.fact = val;
+    }
     
 }

@@ -17,6 +17,7 @@ public class Expression {
     public String breakE;
     public ReturnStatement retState;
     public Assignment assignment;
+    public ArithmeticExp exp;
 
     public Expression(VariableDeclaration variableDeclaration) {
         this.variableDeclaration = variableDeclaration;
@@ -44,6 +45,10 @@ public class Expression {
 
     public Expression(Assignment assignment) {
         this.assignment = assignment;
+    }
+
+    public Expression(ArithmeticExp exp) {
+        this.exp = exp;
     }
     
 }

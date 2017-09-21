@@ -57,7 +57,7 @@ public CMiniProgram root = null;
 :};
 
 terminal INT, CHAR, BOOLEAN, CONSTCHAR, VOID, PRINTF,
-	SCANF, ARTHMEXPSUM, ARTHMEXPMULT, BOOLEXP, SEMICOLON,
+	SCANF, ARTHMEXPSUM, DIVIDE, BOOLEXP, SEMICOLON,
 	COMMA, LEFTPRNTH, RIGHTPRNTH, LEFTCBRAC, RIGHTCBRAC, 
 	EQUALS, OR, AND, FOR, WHILE, IF, ELSE, RETURN, BREAK,
 	NULL, BOOLTOF, ID, DECIMALINT, SINGLECHAR, INTEGER, 
@@ -90,25 +90,21 @@ non terminal ForStatement forStatement;
 non terminal Inits inits;
 non terminal ForArthmExp forArthmExp;
 non terminal AndOR andOr;
-non terminal ArithmeticExp arithmeticExp; 
-non terminal ArithmeticExp artExp; 
+non terminal ArithmeticExp arithmeticExp;  
 non terminal Term term;
 non terminal Factor factor;
 non terminal Assignment assignment;
-non terminal Assignment valAssignment;
 non terminal AssignmentProc assignmentProc;
 non terminal String opsum;
-non terminal String opmult;
 non terminal String operators;
-non terminal String ident;
 
 precedence left OR;
 precedence nonassoc BOOLEXP;
 precedence left ARTHMEXPSUM;
-precedence left ARTHMEXPMULT;
+precedence left ASTERISK, DIVIDE;
 precedence left LEFTPRNTH, RIGHTPRNTH, LEFTCBRAC, RIGHTCBRAC;
 precedence right ELSE;
-precedence left ID;
+precedence right ID;
 
 start with cMiniProgram;
 
@@ -225,10 +221,6 @@ expression ::= variableDeclaration:vd {:
 					Expression r = new Expression(p);
 					RESULT = r;
 				:}
-				| artExp:a  {:
-					Expression r = new Expression(a);
-					RESULT = r;
-				:}
 				| returnStatement:rs {:
 					Expression r = new Expression(rs);
 					RESULT = r;
@@ -271,8 +263,8 @@ varDeclList ::= varDeclList:v COMMA variables:vars {:
 				:}
 				;
 
-variables ::= ident:id assignmentProc:a {:
-					Variables r = new Variables(id, a);
+variables ::= arithmeticExp:aE assignmentProc:a {:
+					Variables r = new Variables(aE, a);
 					RESULT = r;
 				:}
 		  		| AMPERSAND:a variables:v {:
@@ -300,12 +292,6 @@ assignment ::= arithmeticExp:aE {:
 				:}
 				;
 
-artExp ::= arithmeticExp:ae SEMICOLON {:
-			ArithmeticExp r = new ArithmeticExp(ae);
-			RESULT = r;
-		:}
-		;
-
 arithmeticExp ::= arithmeticExp:e opsum:opsum term:t {:
 						if (opsum == "+") {
 							ArithmeticExp r = new ArithmeticExp(e, "+", t);
@@ -321,16 +307,11 @@ arithmeticExp ::= arithmeticExp:e opsum:opsum term:t {:
 					:}
 					;
 
-term ::= term:t opmult:opmult factor:f {:
-				if (opmult == "*") {
-					Term r = new Term(t, "*", f);
-					RESULT = r;
-				}else if (opmult == "/") {
-					Term r = new Term(t, "/", f);
-					RESULT = r;
-				}
+term ::= term:t DIVIDE factor:f {:
+				Term r = new Term(t, "/", f);
+				RESULT = r;
 			:}
-			| term:t ASTERISK:ast factor:f {:
+			| term:t ASTERISK factor:f {:
 				Term r = new Term(t, "*", f);
 					RESULT = r;
 			:}
@@ -350,11 +331,11 @@ factor ::= LEFTPRNTH arithmeticExp:e RIGHTPRNTH {:
 			:}
 			;
 
-value ::= ident:id {:
-				RESULT = new Value(id, "id");
-			:}
-			|INTEGER:num {:
+value ::= INTEGER:num {:
 				RESULT = new Value((String)num, "int");
+			:}
+			|ID:id {:
+				RESULT = new Value((String)id, "id");
 			:}
 			|CONSTCHAR:character {:
 				RESULT = new Value((String)character, "char");
@@ -367,9 +348,6 @@ value ::= ident:id {:
 			:}
 			;
 
-ident ::= ID:id{:
-		RESULT = id;
-	:};
 
 statements ::= ifStatement:ifs 	{: 
 					Statements r = new Statements(ifs);
@@ -530,7 +508,10 @@ forArthmExp ::= ID:id ARTHMEXPSUM:aES1 ARTHMEXPSUM:aES2 {:
 			| ID:id ARTHMEXPSUM:aES EQUALS:eq INTEGER:num {:
 				ForArthmExp r = new ForArthmExp((String)id, (String)aES, (String)eq, (int)num);
 			:}
-			| ID:id ARTHMEXPMULT:aES EQUALS:eq INTEGER:num {:
+			| ID:id ASTERISK:aES EQUALS:eq INTEGER:num {:
+				ForArthmExp r = new ForArthmExp((String)id, (String)aES, (String)eq, (int)num);
+			:}
+			| ID:id DIVIDE:aES EQUALS:eq INTEGER:num {:
 				ForArthmExp r = new ForArthmExp((String)id, (String)aES, (String)eq, (int)num);
 			:}
 			;
@@ -613,18 +594,3 @@ opsum ::= ARTHMEXPSUM:op {:
 				}
 			:}
 			;
-
-opmult ::= ARTHMEXPMULT:op {:
-				if (op == "*") {
-					RESULT = "*";
-				}else if (op == "/") {
-					RESULT = "/";
-				}
-			:}
-			;
-
-
-
-
-
-

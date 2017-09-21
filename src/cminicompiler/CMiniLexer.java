@@ -823,7 +823,7 @@ class CMiniLexer implements java_cup.runtime.Scanner {
             }
           case 56: break;
           case 8: 
-            { return symbol("arthmExpMULT", sym.ARTHMEXPMULT,yytext());
+            { return symbol("*", sym.DIVIDE);
             }
           case 57: break;
           case 9: 

@@ -10,11 +10,12 @@ package classes;
  * @author elenacaballero
  */
 public class Variables {
-    public String id, amper;
+    public String amper;
+    public ArithmeticExp id;
     public AssignmentProc assignmentProc;
     public Variables vars;
 
-    public Variables(String id, AssignmentProc assignmentProc) {
+    public Variables(ArithmeticExp id, AssignmentProc assignmentProc) {
         this.id = id;
         this.assignmentProc = assignmentProc;
     }

@@ -11,7 +11,7 @@ int main () {
     char* m = x;
     while(x == a){
         int &var = 20;
-        int* id;
+        int id;
         ip = &var;  /* store address of var in pointer variable*/
         printf("Address of var variable: ", &var );
     }
@@ -19,6 +19,6 @@ int main () {
     return 0;
 }
 
-char name int a){
+char name (int a){
     a = 9;
 }
